@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#143f35" />
+    <title>VigiaCampo</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/icons-and-card.css" />
+    <link rel="stylesheet" href="/static/boletim.css" />
+    <script type="module" src="/static/app.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <p class="loading">Preparando seu espaço de trabalho…</p>
+    </div>
+    <div id="notice" role="status" aria-live="polite"></div>
+    <dialog id="dialog">
+      <header>
+        <h2 id="dialog-title"></h2>
+        <button id="close-dialog" class="icon-button" aria-label="Fechar">
+          ×
+        </button>
+      </header>
+      <div id="dialog-body"></div>
+    </dialog>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+"""Confere recarga sem rede e envio posterior de rascunhos básicos."""
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser=p.chromium.launch(channel='chrome',headless=True)
+    context=browser.new_context(viewport={'width':390,'height':844},reduced_motion='reduce')
+    page=context.new_page()
+    page.goto('http://127.0.0.1:8001')
+    page.get_by_label('Usuário',exact=True).fill('agente')
+    page.get_by_label('Senha',exact=True).fill('agente123')
+    page.get_by_role('button',name='Entrar na minha conta').click()
+    page.get_by_role('heading',name='Olá, Agente.').wait_for()
+    page.evaluate('navigator.serviceWorker.ready')
+    page.wait_for_function('navigator.serviceWorker.controller !== null')
+    context.set_offline(True)
+    page.reload()
+    page.get_by_role('button',name='Criar registro neste aparelho').click()
+    page.get_by_label('Município',exact=True).fill('Fortaleza')
+    page.get_by_label('Área',exact=True).fill('Offline')
+    page.get_by_label('Ciclo',exact=True).fill('03')
+    page.get_by_role('button',name='Criar registro',exact=True).click()
+    page.get_by_role('button',name='Revisar e enviar').wait_for()
+    page.reload()
+    page.get_by_role('button',name='Revisar e enviar').wait_for()
+    context.set_offline(False)
+    if page.get_by_role('button',name='Tentar novamente').count():
+        page.get_by_role('button',name='Tentar novamente').click()
+    page.get_by_role('heading',name='Olá, Agente.').wait_for()
+    page.get_by_role('button',name='Revisar e enviar').click()
+    page.get_by_role('button',name='Enviar registros',exact=True).click()
+    page.get_by_role('heading',name='Olá, Agente.').wait_for()
+    page.get_by_text('Offline',exact=True).wait_for()
+    assert page.get_by_role('button',name='Revisar e enviar').count()==0
+    print('Offline OK: recarga, criação local, persistência e envio após reconexão.')
+    browser.close()

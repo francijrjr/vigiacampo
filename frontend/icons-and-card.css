@@ -1,0 +1,267 @@
+.lucide {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-icon .lucide {
+  width: 20px;
+  height: 20px;
+}
+.metric-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+}
+.metric-icon .lucide {
+  width: 17px;
+  height: 17px;
+}
+.text-button,
+.subtle-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.text-button {
+  text-decoration: none;
+}
+.badge .lucide {
+  width: 12px;
+  height: 12px;
+}
+.connection .lucide {
+  width: 14px;
+  height: 14px;
+  color: #559575;
+}
+.connection.offline .lucide {
+  color: #b77c2b;
+}
+.icon-button {
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  border-radius: 6px;
+}
+.icon-button .lucide {
+  width: 20px;
+  height: 20px;
+}
+.icon-button:hover {
+  background: var(--paper);
+}
+.empty-icon .lucide {
+  width: 34px;
+  height: 34px;
+  stroke-width: 1.4;
+}
+.pager button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.work-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 285px;
+  background: #eaf0e3;
+  border: 1px solid #dce5d3;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 26px;
+}
+.work-copy {
+  padding: 32px 35px;
+}
+.work-copy .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5c7354;
+  font-size: 10px;
+  letter-spacing: 1.7px;
+}
+.work-copy .eyebrow .lucide {
+  width: 14px;
+  height: 14px;
+}
+.work-copy h2 {
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -1px;
+  margin: 19px 0 13px;
+  font-weight: 800;
+  color: var(--green);
+}
+.work-copy p {
+  font-size: 13px;
+  color: #63745d;
+  line-height: 1.7;
+  max-width: 390px;
+  margin-bottom: 22px;
+}
+.work-actions {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  flex-wrap: wrap;
+}
+.work-actions .primary {
+  font-size: 12px;
+  padding: 12px 17px;
+}
+.work-actions .text-button {
+  font-size: 12px;
+  padding: 10px 0;
+}
+.work-summary {
+  align-self: stretch;
+  margin: 23px 23px 23px 0;
+  border-radius: 12px;
+  padding: 25px;
+  background: #fff9;
+  border: 1px solid #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.work-summary-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 39px;
+  height: 39px;
+  background: #dce9ce;
+  border-radius: 11px;
+  margin-bottom: 21px;
+  color: #4c6e37;
+}
+.work-summary-icon .lucide {
+  width: 21px;
+  height: 21px;
+}
+.work-summary .eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.3px;
+  color: #7b8770;
+}
+.work-count {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 10px 0;
+}
+.work-count strong {
+  font-family: Manrope, sans-serif;
+  font-size: 44px;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+.work-count span {
+  font-size: 12px;
+  max-width: 90px;
+  line-height: 1.5;
+  color: #53674b;
+}
+.work-summary p {
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 0;
+  color: #74816a;
+}
+@media (max-width: 1100px) {
+  .work-card {
+    grid-template-columns: minmax(0, 1fr) 230px;
+  }
+  .work-copy {
+    padding: 27px;
+  }
+  .work-copy h2 {
+    font-size: 28px;
+  }
+  .work-summary {
+    padding: 20px;
+    margin: 20px 20px 20px 0;
+  }
+  .work-actions {
+    gap: 8px;
+  }
+}
+@media (max-width: 700px) {
+  .work-card {
+    grid-template-columns: 1fr;
+  }
+  .work-copy {
+    padding: 25px;
+  }
+  .work-copy h2 {
+    font-size: 28px;
+  }
+  .work-copy p {
+    font-size: 12px;
+  }
+  .work-summary {
+    margin: 0 15px 15px;
+    padding: 17px;
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    column-gap: 13px;
+  }
+  .work-summary-icon {
+    grid-row: 1/4;
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    align-self: center;
+  }
+  .work-summary .eyebrow {
+    grid-column: 2;
+  }
+  .work-count {
+    grid-column: 2;
+    margin: 5px 0;
+    gap: 8px;
+  }
+  .work-count strong {
+    font-size: 26px;
+    letter-spacing: -1px;
+  }
+  .work-count span {
+    max-width: none;
+    font-size: 11px;
+  }
+  .work-summary p {
+    grid-column: 2;
+    font-size: 10px;
+  }
+  .nav-icon {
+    display: flex;
+    width: 15px;
+  }
+  .nav-icon .lucide {
+    width: 15px;
+    height: 15px;
+  }
+  .nav-link {
+    gap: 6px;
+  }
+  .metric-icon {
+    display: inline-flex;
+    padding: 5px;
+  }
+  .metric-icon .lucide {
+    width: 13px;
+    height: 13px;
+  }
+  .metric-header {
+    align-items: start;
+  }
+}
