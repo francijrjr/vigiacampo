@@ -21,10 +21,10 @@ O início rápido cria `.env` com uma chave aleatória se o arquivo ainda não e
 
 Com `SEED_DEMO=true`, estes usuários são criados **somente se não houver usuários no banco**:
 
-| Usuário | Senha | Perfil |
-| --- | --- | --- |
-| supervisor | supervisor123 | Supervisor |
-| agente | agente123 | Agente de campo |
+| Usuário    | Senha         | Perfil          |
+| ---------- | ------------- | --------------- |
+| supervisor | supervisor123 | Supervisor      |
+| agente     | agente123     | Agente de campo |
 
 Se o banco já tiver usuários, as senhas existentes são preservadas.
 
@@ -96,10 +96,10 @@ scripts/        Administração local
 SQLite facilita o desenvolvimento local. Para usar PostgreSQL, configure no `.env`:
 
 ```env
-DATABASE_URL=postgresql+psycopg://usuario:senha@localhost:5432/alberio
+DATABASE_URL=databseurl
 AUTO_CREATE_TABLES=false
 SEED_DEMO=false
-SECRET_KEY=uma-chave-longa-aleatoria-e-privada
+SECRET_KEY=chave
 ```
 
 Em um **banco novo**, execute antes de iniciar:
