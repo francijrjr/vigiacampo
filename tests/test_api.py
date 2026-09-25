@@ -151,6 +151,56 @@ def test_sync_idempotente(cliente):
     assert cliente.post('/api/v1/registros/sync',headers=h,json={'registros':[dados]}).status_code==422
 
 
+def test_criacao_e_copia_de_visita_completa(cliente):
+    from datetime import date
+
+    autorizacao = headers(cliente)
+    original = registro(
+        cliente, autorizacao, client_id="registro-completo",
+        quarteiroes=[{"numero": "10", "client_id": "quarteirao-completo"}],
+        imoveis=[{
+            "numero": "100", "client_id": "imovel-completo",
+            "quarteirao_client_id": "quarteirao-completo",
+            "inspecoes": [{"a1": 2, "b": 3, "client_id": "inspecao-completa"}],
+            "coletas": [{"numero_amostra": "A", "tubito_inicial": 3, "tubito_final": 5}],
+            "especimes": [{"especie": "Aedes", "larvas": 4}],
+            "tratamentos": [{"categoria": "LARVICIDA_1", "depositos_tratados": 2}],
+            "depositos_eliminados": [{"tipo": "Pneu", "quantidade": 2}],
+        }],
+    )
+    assert original["status"] == "DRAFT"
+    assert original["synced_at"] is None
+    visita_original = original["imoveis"][0]
+    assert visita_original["quarteirao_id"] == original["quarteiroes"][0]["id"]
+    assert visita_original["inspecoes"][0]["total"] == 5
+    assert visita_original["coletas"][0]["quantidade_tubitos"] == 3
+
+    resposta = cliente.post(
+        f"/api/v1/registros/{original['id']}/duplicar", headers=autorizacao
+    )
+    assert resposta.status_code == 201, resposta.text
+    copia = resposta.json()
+    assert copia["data"] == date.today().isoformat()
+    assert copia["status"] == "DRAFT"
+    assert copia["concluido"] is False
+    assert copia["client_id"] is None
+    visita_copiada = copia["imoveis"][0]
+    assert visita_copiada["id"] != visita_original["id"]
+    assert visita_copiada["quarteirao_id"] == copia["quarteiroes"][0]["id"]
+    assert visita_copiada["quarteirao_id"] != visita_original["quarteirao_id"]
+    assert visita_copiada["client_id"] is None
+    assert visita_copiada["fotos"] == []
+    for colecao, campo in [
+        ("inspecoes", "total"), ("coletas", "quantidade_tubitos"),
+        ("especimes", "larvas"), ("tratamentos", "depositos_tratados"),
+        ("depositos_eliminados", "quantidade"),
+    ]:
+        item = visita_copiada[colecao][0]
+        assert item[campo] == visita_original[colecao][0][campo]
+        assert item["imovel_id"] == visita_copiada["id"]
+        assert item["client_id"] is None
+
+
 def test_fotos_e_pdf(cliente):
     h=headers(cliente); r=registro(cliente,h,observacoes='<teste> & observações')
     im=cliente.post(f"/api/v1/registros/{r['id']}/imoveis",headers=h,json={'numero':'100'}).json()

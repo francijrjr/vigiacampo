@@ -79,7 +79,7 @@ app/
   db/           Conexão e transações do banco
   models/       Tabelas e relacionamentos
   schemas/      Campos aceitos e respostas da API
-  services/     Permissões, totais, PDF e arquivos
+  services/     Regras de registros, permissões, totais, PDF e arquivos
 frontend/
   api.js        Comunicação e renovação de sessão
   forms.js      Campos e formulários reutilizáveis
@@ -90,6 +90,19 @@ migrations/     Histórico de mudanças do banco
 scripts/        Administração local
  tests/         Testes da API e do navegador
 ```
+
+### Padrão de organização
+
+As rotas em `app/api/` recebem e validam as requisições, verificam o acesso e
+confirmam a transação. Os serviços em `app/services/` concentram operações
+reutilizáveis. Em `services/registros.py`, criação online e sincronização usam
+o mesmo fluxo para salvar registros, quarteirões e visitas; a duplicação tem
+uma função própria. As consultas completas também são compartilhadas.
+
+Esses serviços podem executar `flush`, mas não fazem `commit`: a rota confirma
+a operação somente ao final. Isso mantém o lote offline em uma única transação.
+Novas regras devem usar nomes descritivos e funções com uma responsabilidade,
+preservando os contratos dos schemas e a cobertura dos testes de API.
 
 ## Banco e evolução
 
