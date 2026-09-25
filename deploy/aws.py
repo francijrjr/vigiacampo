@@ -142,9 +142,10 @@ def origem():
 
 def enviar_front():
     s3=cliente('s3')
-    for arquivo in (RAIZ/'frontend').iterdir():
+    for arquivo in (RAIZ/'frontend').rglob('*'):
         if not arquivo.is_file():continue
-        chave=arquivo.name if arquivo.name in ['index.html','sw.js'] else 'static/'+arquivo.name
+        relativo=arquivo.relative_to(RAIZ/'frontend').as_posix()
+        chave=relativo if relativo in ['index.html','sw.js'] else 'static/'+relativo
         tipo=mimetypes.guess_type(arquivo.name)[0] or 'application/octet-stream'
         if arquivo.suffix=='.js':tipo='application/javascript'
         s3.upload_file(str(arquivo),estado['bucket_front'],chave,ExtraArgs={'ContentType':tipo+'; charset=utf-8','CacheControl':'no-cache' if arquivo.name in ['index.html','sw.js'] else 'public,max-age=3600'})

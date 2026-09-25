@@ -81,9 +81,11 @@ app/
   schemas/      Campos aceitos e respostas da API
   services/     Regras de registros, permissões, totais, PDF e arquivos
 frontend/
-  api.js        Comunicação e renovação de sessão
-  forms.js      Campos e formulários reutilizáveis
-  app.js        Telas e ações da interface
+  app.js        Inicialização do controller principal
+  models/       API, sessão, consultas, estado e rascunhos locais
+  views/        Templates por tela, componentes e formulários
+  controllers/  Navegação, carregamento das telas e ações por assunto
+  utils/        Formatação de datas e download de arquivos
   styles.css    Aparência e adaptação ao celular
   sw.js         Cache dos arquivos públicos da interface
 migrations/     Histórico de mudanças do banco
@@ -103,6 +105,34 @@ Esses serviços podem executar `flush`, mas não fazem `commit`: a rota confirma
 a operação somente ao final. Isso mantém o lote offline em uma única transação.
 Novas regras devem usar nomes descritivos e funções com uma responsabilidade,
 preservando os contratos dos schemas e a cobertura dos testes de API.
+
+### MVC no frontend
+
+O fluxo é **evento → controller → model → view**. `app.js` apenas inicia a
+aplicação; os módulos usam JavaScript nativo, sem etapa de compilação.
+
+- **Models:** `models/api.js` cuida de HTTP e sessão; `consultas.js` reúne as
+  consultas e a regra de edição; `estado.js` guarda o estado de navegação;
+  `rascunhos.js` persiste os registros offline separados por conta.
+- **Views:** recebem dados por parâmetros e produzem HTML. Não importam models
+  ou controllers, não consultam a API e não alteram o estado da aplicação.
+  Há arquivos próprios para início, registros, visitas, equipe, relatórios,
+  conta e boletins. Componentes e formulários são compartilhados.
+- **Controllers:** carregam os dados, atualizam o estado e chamam as views.
+  `aplicacao.js` coordena navegação e eventos; `telas.js` prepara os dados de
+  cada tela; `acoes.js` encaminha cada `data-action` ao controller do assunto,
+  como `registros-acoes.js`, `visitas-acoes.js` ou `rascunhos-acoes.js`.
+
+Para alterar a apresentação, procure a view da tela. Para mudar o que acontece
+em um botão, procure sua ação no controller correspondente. Para reutilizar
+uma consulta ou regra de dados, coloque-a no model. Views recebem callbacks
+quando precisam vincular formulários, evitando importações circulares.
+
+Cada renderização tem uma versão: respostas antigas são descartadas após
+mudanças de página. As chaves da sessão e dos rascunhos foram preservadas.
+Ao adicionar um módulo público, inclua seu caminho na lista `ASSETS` de
+`sw.js` e atualize a versão do cache. O script AWS publica as subpastas
+recursivamente, preservando os caminhos dos imports.
 
 ## Banco e evolução
 
