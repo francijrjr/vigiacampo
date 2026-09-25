@@ -1,5 +1,5 @@
 // Só arquivos públicos da interface entram no cache. Respostas da API nunca são armazenadas.
-const CACHE = "alberio-interface-v5";
+const CACHE = "alberio-interface-v6";
 const ASSETS = [
   "/",
   "/static/styles.css",
