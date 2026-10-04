@@ -3,7 +3,7 @@ import enum
 from datetime import datetime, date
 from sqlalchemy import (
     Column, Integer, String, Boolean, DateTime, Date, Enum as SAEnum,
-    ForeignKey, Text, Float, UniqueConstraint
+    ForeignKey, Text, Float, UniqueConstraint, JSON
 )
 from sqlalchemy.orm import relationship
 from app.db.session import Base
@@ -71,6 +71,7 @@ class RegistroDiario(Base):
     agente_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     municipio = Column(String(100), nullable=False)
     codigo_area = Column(String(50), nullable=False)
+    codigo_serie = Column(String(100), nullable=True)
     ciclo = Column(String(50), nullable=False)
     data = Column(Date, nullable=False)
     zona = Column(String(50), nullable=True)
@@ -105,6 +106,7 @@ class Quarteirao(Base):
     sequencia = Column(Integer, nullable=True)
     lado = Column(String(20), nullable=True)
     logradouro = Column(String(255), nullable=True)
+    geometria = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=agora_utc)
 
     registro = relationship("RegistroDiario", back_populates="quarteiroes")

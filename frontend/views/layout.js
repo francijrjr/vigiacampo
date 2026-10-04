@@ -8,6 +8,7 @@ export function login() {
 }
 
 export function estrutura(rota, user, online) {
+  const nomesMobile = { inicio: "Início", registros: "Registros", equipe: "Equipe", relatorios: "Relatórios", conta: "Conta" };
   const menu = [
     ["inicio", "layout-dashboard", "Visão geral"],
     ["registros", "clipboard-list", "Registros diários"],
@@ -19,13 +20,13 @@ export function estrutura(rota, user, online) {
       : []),
     ["conta", "settings", "Minha conta"],
   ];
-  return `<div class="layout"><aside class="sidebar"><div class="brand"><span class="brand-mark">V</span>VigiaCampo</div><div class="nav-label">ESPAÇO DE TRABALHO</div><nav>${menu.map(([id, nomeIcone, nome]) => `<a class="nav-link ${rota === id ? "active" : ""}" href="#${id}"><span class="nav-icon">${icone(nomeIcone)}</span>${nome}</a>`).join("")}</nav><div class="sidebar-bottom"><div class="field-note"><strong>Pequenas ações.<br>Uma cidade mais protegida.</strong>Cada visita registrada ajuda a acompanhar o cuidado com a comunidade.</div><div class="profile"><span class="avatar">${e(
+  return `<div class="layout"><aside class="sidebar"><div class="brand"><span class="brand-mark">V</span>VigiaCampo</div><div class="nav-label">ESPAÇO DE TRABALHO</div><nav aria-label="Navegação principal">${menu.map(([id, nomeIcone, nome]) => `<a class="nav-link ${rota === id ? "active" : ""}" href="#${id}" aria-label="${nome}" ${rota === id ? 'aria-current="page"' : ""}><span class="nav-icon" aria-hidden="true">${icone(nomeIcone)}</span><span class="nav-name">${nome}</span><span class="nav-name-mobile" aria-hidden="true">${nomesMobile[id]}</span></a>`).join("")}</nav><div class="sidebar-bottom"><div class="field-note"><strong>Pequenas ações.<br>Uma cidade mais protegida.</strong>Cada visita registrada ajuda a acompanhar o cuidado com a comunidade.</div><div class="profile"><span class="avatar">${e(
     user.full_name
       .split(" ")
       .map((s) => s[0])
       .slice(0, 2)
       .join(""),
-  )}</span><div><p>${e(user.full_name)}</p><small>${user.role === "SUPERVISOR" ? "Supervisor" : "Agente de campo"}</small></div></div>${botao("Sair da conta", "sair", "text-button")}</div></aside><main class="main"><header class="topbar"><span>Vigilância em saúde <span class="muted"> / ${e(user.municipio || "PNCD")}</span></span><span class="connection ${online ? "" : "offline"}">${icone(online ? "wifi" : "wifi-off")}${online ? "Conectado" : "Sem conexão"}</span></header><div id="content" class="content"><p class="loading">Carregando informações…</p></div></main></div>`;
+  )}</span><div><p>${e(user.full_name)}</p><small>${user.role === "SUPERVISOR" ? "Supervisor" : "Agente de campo"}</small></div></div>${botao("Sair da conta", "sair", "text-button")}</div></aside><main class="main"><header class="topbar"><a class="mobile-brand" href="#inicio" aria-label="VigiaCampo — Início"><span class="brand-mark">V</span><span>VigiaCampo<small>${e(user.municipio || "Vigilância em saúde")}</small></span></a><span class="desktop-context">Vigilância em saúde <span class="muted"> / ${e(user.municipio || "PNCD")}</span></span><span class="connection ${online ? "" : "offline"}">${icone(online ? "wifi" : "wifi-off")}${online ? "Conectado" : "Sem conexão"}</span></header><div id="content" class="content"><p class="loading">Carregando informações…</p></div></main></div>`;
 }
 
 export function filaPainel(pendentes) {

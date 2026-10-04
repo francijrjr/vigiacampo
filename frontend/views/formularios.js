@@ -42,6 +42,7 @@ export const situacoes = {
 
 export const camposRegistro = [
   ["municipio", "Município", "text"],
+  ["codigo_serie", "Código de série", "optional"],
   ["codigo_area", "Área", "text"],
   ["ciclo", "Ciclo", "text"],
   ["data", "Data", "date"],

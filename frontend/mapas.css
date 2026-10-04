@@ -1,0 +1,80 @@
+dialog:has(.quarteirao-mapa) {
+  max-width: 880px;
+}
+.quarteirao-mapa {
+  margin-top: 22px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.mapa-intro {
+  padding: 16px;
+  background: #f1f7f8;
+}
+.mapa-intro h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+.mapa-intro p {
+  margin: 0;
+  font-size: 13px;
+  color: #45616a;
+}
+.mapa-controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+}
+.mapa-controles button {
+  padding: 8px 12px;
+  font-size: 13px;
+  min-height: 40px;
+}
+.mapa-canvas {
+  height: 350px;
+  background: #e8eeed;
+  cursor: crosshair;
+}
+.mapa-estado,
+.mapa-desenho,
+.mapa-rede {
+  padding: 0 16px;
+  font-size: 13px;
+}
+.mapa-rede {
+  color: #974510;
+}
+.mapa-estado[data-precisao="baixa"] {
+  color: #85530e;
+  font-weight: 600;
+}
+.mapa-vertice {
+  background: white;
+  border: 3px solid #318ab0;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px #173c4b44;
+}
+.leaflet-tooltip.mapa-rotulo {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: #12465d;
+  font-size: 17px;
+  font-weight: 800;
+}
+.leaflet-tooltip.mapa-rotulo::before {
+  display: none;
+}
+.mapa-canvas .leaflet-control-attribution {
+  font-size: 10px;
+}
+@media (max-width: 600px) {
+  .mapa-canvas {
+    height: 300px;
+  }
+  .mapa-controles {
+    padding: 10px;
+    gap: 6px;
+  }
+}
