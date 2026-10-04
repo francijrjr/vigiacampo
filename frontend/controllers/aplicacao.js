@@ -1,4 +1,3 @@
-// Ponto de entrada: conecta telas, ações e eventos de navegação.
 import { api, ErroConexao, usuarioAtual } from "../models/api.js";
 import { telaBoletim } from "../views/boletim.js";
 import { icone } from "../views/icones.js";
@@ -96,6 +95,14 @@ async function render() {
 }
 
 document.addEventListener("click", async (evento) => {
+  const linhaRegistro = evento.target.closest("[data-registro-linha]");
+  if (linhaRegistro && !evento.defaultPrevented && evento.button === 0
+    && !evento.ctrlKey && !evento.metaKey && !evento.shiftKey && !evento.altKey
+    && !evento.target.closest("a, button, input, select, textarea, label, [contenteditable], [data-action]")
+    && !window.getSelection()?.toString()) {
+    linhaRegistro.querySelector("[data-abrir-registro]")?.click();
+    return;
+  }
   const button = evento.target.closest("[data-action]");
   if (!button) return;
   evento.preventDefault();

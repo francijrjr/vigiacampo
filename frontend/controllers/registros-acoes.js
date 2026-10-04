@@ -1,4 +1,5 @@
 import { baixar } from "../utils/download.js";
+import { montarMapaQuarteirao } from "../views/mapa-quarteirao.js";
 import { api, ErroConexao, usuarioAtual } from "../models/api.js";
 
 import { camposQuarteirao, camposRegistro } from "../views/formularios.js";
@@ -11,7 +12,7 @@ export function criarAcoesRegistros({ render, modal }) {
     modal(
       "Novo registro diário",
       camposRegistro,
-      { municipio: usuarioAtual().municipio, data: hoje(), atividade: "LI" },
+      { municipio: usuarioAtual().municipio, codigo_serie: "20ª Ceres", data: hoje(), atividade: "LI" },
       async (dados) => {
         dados.client_id = crypto.randomUUID();
         if (!navigator.onLine) {
@@ -109,6 +110,8 @@ export function criarAcoesRegistros({ render, modal }) {
             body: dados,
           },
         ),
+      "Salvar",
+      montarMapaQuarteirao,
     );
   }
 

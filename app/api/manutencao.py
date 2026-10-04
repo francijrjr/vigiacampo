@@ -46,7 +46,10 @@ def editar_quarteirao(registro_id: int, quarteirao_id: int, payload: QuarteiraoC
     item = db.query(Quarteirao).filter_by(id=quarteirao_id, registro_id=registro_id).first()
     if not item:
         raise HTTPException(404, "Quarteirão não encontrado")
-    for campo, valor in payload.model_dump(exclude={"client_id"}).items():
+    campos = payload.model_dump(exclude={"client_id"})
+    if 'geometria' not in payload.model_fields_set:
+        campos.pop('geometria', None)
+    for campo, valor in campos.items():
         setattr(item, campo, valor)
     db.commit()
     return item

@@ -1,4 +1,3 @@
-// Estado compartilhado de navegação e da tela aberta. A sessão fica em api.js.
 export const estado = {
   pagina: 0,
   filtros: {},

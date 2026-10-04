@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from typing import Optional, List
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, field_validator
+from app.schemas.geometria import validar_poligono
 from app.schemas.base import DadosEntrada
 from app.models.registro import (
     StatusRegistro, TipoAtividade, TipoImovel, TipoVisita,
@@ -191,6 +192,12 @@ class QuarteiraoBase(DadosEntrada):
     lado: Optional[str] = None
     logradouro: Optional[str] = None
     client_id: Optional[str] = None
+    geometria: Optional[dict] = None
+
+    @field_validator('geometria')
+    @classmethod
+    def validar_geometria(cls, valor):
+        return validar_poligono(valor)
 
 
 class QuarteiraoCreate(QuarteiraoBase):
@@ -206,6 +213,7 @@ class QuarteiraoResponse(QuarteiraoBase):
 
 # ---------- RegistroDiario ----------
 class RegistroDiarioBase(DadosEntrada):
+    codigo_serie: Optional[str] = Field("20ª Ceres", min_length=1, max_length=100)
     municipio: str = Field(..., min_length=1, max_length=100)
     codigo_area: str = Field(..., min_length=1, max_length=50)
     ciclo: str = Field(..., min_length=1, max_length=50)
@@ -227,6 +235,7 @@ class RegistroDiarioCreate(RegistroDiarioBase):
 
 
 class RegistroDiarioUpdate(DadosEntrada):
+    codigo_serie: Optional[str] = Field(None, min_length=1, max_length=100)
     municipio: Optional[str] = None
     codigo_area: Optional[str] = None
     ciclo: Optional[str] = None
@@ -257,6 +266,7 @@ class RegistroDiarioResponse(RegistroDiarioBase):
 
 
 class RegistroDiarioListItem(DadosEntrada):
+    codigo_serie: Optional[str] = None
     id: int
     municipio: str = Field(..., min_length=1, max_length=100)
     codigo_area: str = Field(..., min_length=1, max_length=50)

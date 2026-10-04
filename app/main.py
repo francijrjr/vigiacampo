@@ -28,7 +28,7 @@ def seed_admin():
                 full_name="Supervisor PNCD",
                 hashed_password=get_password_hash("supervisor123"),
                 role=UserRole.SUPERVISOR,
-                municipio="Exemplo",
+                municipio="",
                 is_active=True,
             )
             db.add(supervisor)

@@ -4,6 +4,37 @@ Sistema para registrar atividades de campo do PNCD, com API em FastAPI e interfa
 
 ## Inicio rapido
 
+### Mapa dos quarteirões
+
+Em **Quarteirões → Adicionar**, o formulário solicita a localização do dispositivo
+e abre o mapa para marcar os cantos da quadra. Clique/toque em pelo menos três
+cantos e use **Concluir contorno**. Arraste os pontos para ajustar ou use
+**Desfazer ponto** / **Limpar desenho**. O contorno azul e seu número reaparecem
+ao editar; a geometria também acompanha a duplicação e a sincronização de registros.
+O desenho é opcional, preservando cadastros antigos e o cadastro sem GPS.
+
+A localização requer permissão do navegador e HTTPS (ou localhost); a precisão
+informada pelo aparelho aparece no formulário. Apenas a geometria desenhada é
+persistida, sem rastrear o usuário. Sem permissão, navegue manualmente pelo mapa.
+O sistema aguarda até 20 segundos por leituras melhores, descarta posições antigas
+e encerra a busca ao obter precisão informada de até 50 metros. Uma leitura com
+margem maior aparece como uma região aproximada, sem marcador de posição exata.
+A busca para ao fechar o formulário; mover o mapa impede recentralizações tardias.
+O navegador e o dispositivo podem fornecer uma posição incorreta mesmo com
+precisão declarada alta. Confira o local; a aplicação não consegue garantir GPS exato.
+As ruas dependem de internet; os mapas não são baixados para uso offline.
+
+**Banco existente:** execute `python -m alembic upgrade head` antes de iniciar a
+versão com mapas, seguindo a seção de migrações abaixo caso o banco ainda não
+tenha controle de versão. A revisão `91c02_mapa` acrescenta a coluna JSON opcional
+`quarteiroes.geometria`, em GeoJSON Polygon (longitude, latitude).
+
+Leaflet 1.9.4 está incluído em `frontend/vendor/leaflet`, com sua licença.
+Referências: [API Leaflet](https://leafletjs.com/reference.html) e
+[política dos mapas OpenStreetMap](https://operations.osmfoundation.org/policies/tiles/).
+
+### Executar localmente
+
 Na raiz do projeto:
 
 ```powershell

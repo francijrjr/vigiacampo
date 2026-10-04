@@ -245,6 +245,7 @@ def add_quarteirao(
         sequencia=payload.sequencia,
         lado=payload.lado,
         logradouro=payload.logradouro,
+        geometria=payload.geometria,
     )
     db.add(q)
     db.commit()

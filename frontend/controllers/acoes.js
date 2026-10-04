@@ -1,4 +1,3 @@
-// Despacho explícito: cada assunto tem seu controller de ações.
 import { criarAcoesBoletins } from "./boletins-acoes.js";
 import { criarAcoesRegistros } from "./registros-acoes.js";
 import { criarAcoesNavegacao } from "./navegacao-acoes.js";

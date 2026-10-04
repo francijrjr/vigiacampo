@@ -66,6 +66,73 @@ def test_swagger_e_front(cliente):
     assert '/api/v1/registros/{registro_id}/imoveis/{imovel_id}/inspecoes' in schema['paths']
 
 
+POLIGONO = {'type': 'Polygon', 'coordinates': [[
+    [-38.53, -3.73], [-38.529, -3.73], [-38.529, -3.731], [-38.53, -3.731], [-38.53, -3.73],
+]]}
+
+
+def test_quarteirao_mapa_persistencia_edicao_duplicacao(cliente):
+    h = headers(cliente)
+    r = registro(cliente, h)
+    base = f"/api/v1/registros/{r['id']}"
+    resposta = cliente.post(base+'/quarteiroes', headers=h, json={'numero': '01', 'geometria': POLIGONO})
+    assert resposta.status_code == 201, resposta.text
+    q = resposta.json()
+    assert q['geometria'] == POLIGONO
+    caminho = base+f"/quarteiroes/{q['id']}"
+    # Clientes antigos que não enviam geometria não apagam o contorno.
+    assert cliente.put(caminho, headers=h, json={'numero': '02'}).json()['geometria'] == POLIGONO
+    assert cliente.get(base, headers=h).json()['quarteiroes'][0]['geometria'] == POLIGONO
+    copia = cliente.post(base+'/duplicar', headers=h).json()
+    assert copia['quarteiroes'][0]['geometria'] == POLIGONO
+    assert cliente.put(caminho, headers=h, json={'numero': '02', 'geometria': None}).json()['geometria'] is None
+    assert cliente.get(base, headers=h).json()['quarteiroes'][0]['geometria'] is None
+
+
+def test_registro_aninhado_preserva_mapa(cliente):
+    h = headers(cliente)
+    r = registro(cliente, h, quarteiroes=[{'numero': '01', 'geometria': POLIGONO}])
+    assert r['quarteiroes'][0]['geometria'] == POLIGONO
+
+
+def test_codigo_serie_padrao_edicao_copia_e_sync(cliente):
+    h = headers(cliente)
+    r = registro(cliente, h)
+    assert r['codigo_serie'] == '20ª Ceres'
+    base = f"/api/v1/registros/{r['id']}"
+    alterado = cliente.patch(base, headers=h, json={'codigo_serie': '21ª Ceres'})
+    assert alterado.status_code == 200, alterado.text
+    assert cliente.get(base, headers=h).json()['codigo_serie'] == '21ª Ceres'
+    assert cliente.post(base+'/duplicar', headers=h).json()['codigo_serie'] == '21ª Ceres'
+    assert cliente.patch(base, headers=h, json={'codigo_serie': 'x'*101}).status_code == 422
+    offline = {key: r[key] for key in ('municipio', 'codigo_area', 'ciclo', 'data', 'atividade')}
+    resposta = cliente.post('/api/v1/registros/sync', headers=h, json={'registros': [
+        {**offline, 'client_id': 'serie-offline', 'codigo_serie': '22ª Ceres'},
+        {**offline, 'client_id': 'serie-legado'},
+    ]})
+    assert resposta.status_code == 200, resposta.text
+    for item, serie in zip(resposta.json()['results'], ['22ª Ceres', '20ª Ceres']):
+        assert cliente.get(f"/api/v1/registros/{item['server_id']}", headers=h).json()['codigo_serie'] == serie
+    assert registro(cliente, h, codigo_serie=None)['codigo_serie'] is None
+
+
+@pytest.mark.parametrize('geometria', [
+    {'type': 'Point', 'coordinates': [0, 0]},
+    {'type': 'Polygon', 'coordinates': []},
+    {'type': 'Polygon', 'coordinates': [[[0, 0], [1, 0], [0, 1]]]},
+    {'type': 'Polygon', 'coordinates': [[[181, 0], [1, 0], [0, 1], [181, 0]]]},
+    {'type': 'Polygon', 'coordinates': [[[0, 0], [1, 1], [2, 2], [0, 0]]]},
+    {'type': 'Polygon', 'coordinates': [[[0, 0], [2, 2], [0, 2], [2, 0], [0, 0]]]},
+    {'type': 'Polygon', 'coordinates': [[[0, 0], [1, 0], [1, 0], [0, 0]]]},
+])
+def test_rejeita_contornos_invalidos(cliente, geometria):
+    h = headers(cliente)
+    r = registro(cliente, h)
+    resposta = cliente.post(f"/api/v1/registros/{r['id']}/quarteiroes", headers=h,
+                            json={'numero': '01', 'geometria': geometria})
+    assert resposta.status_code == 422, resposta.text
+
+
 def test_sessao_logout_e_senha(cliente):
     sessao=entrar(cliente)
     h={'Authorization':'Bearer '+sessao['access_token']}
