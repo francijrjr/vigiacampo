@@ -23,7 +23,7 @@ with sync_playwright() as p:
     page.get_by_label('Município',exact=True).fill('Fortaleza')
     page.get_by_label('Área',exact=True).fill('Centro')
     page.get_by_label('Ciclo',exact=True).fill('03')
-    page.get_by_role('button',name='Criar registro',exact=True).click()
+    page.locator('#edit-form').get_by_role('button',name='Criar registro',exact=True).click()
     page.get_by_role('heading',name='Informações do dia').wait_for()
     page.get_by_role('button',name='Adicionar',exact=True).click()
     page.get_by_label('Número do quarteirão').fill('10')

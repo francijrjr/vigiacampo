@@ -137,6 +137,7 @@ def criar_registro(
         agente_id=agente_id,
         municipio=payload.municipio,
         codigo_area=payload.codigo_area,
+        codigo_serie=payload.codigo_serie,
         ciclo=payload.ciclo,
         data=payload.data,
         zona=payload.zona,
@@ -157,6 +158,7 @@ def criar_registro(
             sequencia=quarteirao.sequencia,
             lado=quarteirao.lado,
             logradouro=quarteirao.logradouro,
+            geometria=quarteirao.geometria,
         ))
     db.flush()
 
@@ -174,6 +176,7 @@ def copiar_registro(db: Session, original: RegistroDiario, usuario: User) -> Reg
         agente_id=usuario.id,
         municipio=original.municipio,
         codigo_area=original.codigo_area,
+        codigo_serie=original.codigo_serie,
         ciclo=original.ciclo,
         data=date.today(),
         zona=original.zona,
@@ -193,6 +196,7 @@ def copiar_registro(db: Session, original: RegistroDiario, usuario: User) -> Reg
             sequencia=quarteirao.sequencia,
             lado=quarteirao.lado,
             logradouro=quarteirao.logradouro,
+            geometria=quarteirao.geometria,
         )
         db.add(copia_quarteirao)
         db.flush()
