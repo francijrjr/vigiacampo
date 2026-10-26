@@ -140,7 +140,7 @@ def gerar_boletim_pdf(boletim):
 
         for coluna, grupo in enumerate(grupos):
             x, y = MARGEM + coluna * (metade + 12), topo_tabela
-            cabecalho_colunas = ["Rua ou logradouro", "Nº", "L\nA\nD\nO", "Tipo do\nimóvel"]
+            cabecalho_colunas = ["Rua ou logradouro", "Nº", "Nº do\nlado", "Tipo do\nimóvel"]
             alturas = [33] + [h for _, h in grupo]
             for valores, h in [(cabecalho_colunas, alturas[0]), *grupo]:
                 pos = x

@@ -141,7 +141,7 @@ class ImovelBase(DadosEntrada):
     numero: str = Field(..., min_length=1, max_length=20)
     complemento: Optional[str] = None
     logradouro: Optional[str] = Field(None, max_length=255, description="Rua ou logradouro do imóvel")
-    lado: Optional[str] = Field(None, max_length=20, description="Lado do quarteirão, conforme a ficha")
+    lado: Optional[str] = Field(None, max_length=20, description="Número do lado do quarteirão, conforme a ficha")
     tipo: TipoImovel = TipoImovel.RESIDENCIAL
     hora_entrada: Optional[str] = None
     tipo_visita: TipoVisita = TipoVisita.NORMAL

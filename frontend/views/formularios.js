@@ -64,13 +64,13 @@ export const camposQuarteirao = [
   ["numero", "Número do quarteirão", "text"],
   ["logradouro", "Rua / logradouro", "optional"],
   ["sequencia", "Sequência", "number"],
-  ["lado", "Lado", "optional"],
+  ["lado", "Número do lado", "number"],
 ];
 
 export const camposImovel = [
   ["logradouro", "Rua ou logradouro", "optional"],
   ["numero", "Número do imóvel", "text"],
-  ["lado", "Lado", "optional"],
+  ["lado", "Número do lado", "number"],
   ["complemento", "Complemento", "optional"],
   ["tipo", "Tipo de imóvel", "select", tipos],
   ["hora_entrada", "Hora da visita", "time"],
