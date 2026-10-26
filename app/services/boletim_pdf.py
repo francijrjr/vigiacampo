@@ -110,23 +110,31 @@ def gerar_boletim_pdf(boletim):
         pdf.setFont("Helvetica", 6.2)
         pdf.drawRightString(largura - MARGEM, altura - 113, f"Folha {numero} de {len(paginas)}")
 
-        # Quadro do responsável, seguindo o modelo oficial.
-        x, y, w = largura - MARGEM - 195, altura - 123, 195
-        pdf.rect(x, y - 39, w, 39)
-        pdf.setFont("Helvetica", 8)
+        # Quadro do responsável com quatro células equivalentes e seleção legível.
+        x, y, w = largura - MARGEM - 210, altura - 123, 210
+        altura_titulo, altura_opcao = 14, 16
+        pdf.rect(x, y - altura_titulo - 2 * altura_opcao, w, altura_titulo + 2 * altura_opcao)
+        pdf.setFont("Helvetica-Bold", 8)
         pdf.drawCentredString(x + w / 2, y - 10, "RESPONSÁVEL")
-        pdf.line(x, y - 14, x + w, y - 14)
-        for divisor in (w * .42, w * .50, w * .88):
-            pdf.line(x + divisor, y - 14, x + divisor, y - 39)
-        pdf.line(x, y - 26, x + w, y - 26)
-        labels = [("Inspetor Geral", x + 4, y - 23), ("Inspetor", x + w * .52, y - 23), ("Chefe de Equipe", x + 4, y - 35), ("Agente", x + w * .52, y - 35)]
-        for label, lx, ly in labels:
+        pdf.line(x, y - altura_titulo, x + w, y - altura_titulo)
+        pdf.line(x, y - altura_titulo - altura_opcao, x + w, y - altura_titulo - altura_opcao)
+        pdf.line(x + w / 2, y - altura_titulo, x + w / 2, y - altura_titulo - 2 * altura_opcao)
+        metade, caixa = w / 2, 17
+        opcoes = [
+            ("INSPETOR_GERAL", "Inspetor Geral", 0, 0),
+            ("INSPETOR", "Inspetor", 1, 0),
+            ("CHEFE_EQUIPE", "Chefe de Equipe", 0, 1),
+            ("AGENTE", "Agente", 1, 1),
+        ]
+        for codigo, nome, coluna, linha in opcoes:
+            inicio_x = x + coluna * metade
+            inicio_y = y - altura_titulo - linha * altura_opcao
+            pdf.rect(inicio_x + metade - caixa, inicio_y - altura_opcao, caixa, altura_opcao)
             pdf.setFont("Helvetica", 7)
-            pdf.drawString(lx, ly, label)
-        funcao_x = {"INSPETOR_GERAL": x + w * .46, "INSPETOR": x + w * .92, "CHEFE_EQUIPE": x + w * .46, "AGENTE": x + w * .92}[boletim.funcao_responsavel]
-        funcao_y = y - 20 if boletim.funcao_responsavel in ("INSPETOR_GERAL", "INSPETOR") else y - 32
-        pdf.setFont("Helvetica-Bold", 9)
-        pdf.drawCentredString(funcao_x, funcao_y, "X")
+            pdf.drawString(inicio_x + 6, inicio_y - 10, nome)
+            if boletim.funcao_responsavel == codigo:
+                pdf.setFont("Helvetica-Bold", 10)
+                pdf.drawCentredString(inicio_x + metade - caixa / 2, inicio_y - 11, "X")
 
     for numero, grupos in enumerate(paginas, 1):
         pdf.setStrokeColorRGB(.15, .15, .15)
