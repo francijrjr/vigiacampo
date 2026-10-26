@@ -5,6 +5,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN useradd --uid 10001 --create-home appuser
 COPY app app
+COPY frontend/assets/logoCrato.png app/assets/logoCrato.png
 COPY migrations migrations
 COPY scripts scripts
 COPY alembic.ini .
