@@ -376,6 +376,36 @@ small {
   border-radius: 6px;
   color: #698457;
 }
+.antivetorial-resumo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  padding: 28px 30px;
+  margin-bottom: 22px;
+  border: 1px solid #c9ddd1;
+  border-radius: 14px;
+  background: linear-gradient(115deg, #eaf3ec 0%, #f8fbf7 58%, #ffffff 100%);
+  box-shadow: 0 12px 28px #183c3110;
+}
+.antivetorial-resumo-icone {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  color: var(--green);
+  background: #d2e7d6;
+}
+.antivetorial-resumo-icone .lucide { width: 27px; height: 27px; }
+.antivetorial-resumo .eyebrow { color: #587662; }
+.antivetorial-resumo h2 { margin: 5px 0 7px; font-size: 21px; }
+.antivetorial-resumo p { max-width: 620px; margin: 0; color: #587062; font-size: 13px; line-height: 1.55; }
+.antivetorial-resumo-metricas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+.antivetorial-resumo-metricas span { display: inline-flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 99px; background: #ffffffa8; color: #315844; font-size: 11px; font-weight: 600; }
+.antivetorial-resumo-metricas .lucide { width: 14px; height: 14px; }
+.antivetorial-resumo-acoes { display: grid; gap: 8px; min-width: 154px; }
+.antivetorial-resumo-acoes > * { justify-content: center; }
 .panel {
   background: white;
   border: 1px solid var(--line);

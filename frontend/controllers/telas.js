@@ -77,9 +77,10 @@ export function criarTelas(render) {
   }
 
   async function detalheRegistro(id, versao) {
-    const [registro, boletins] = await Promise.all([
+    const [registro, boletins, antivetorial] = await Promise.all([
       consultarRegistro(id),
       consultarBoletins(id),
+      api(`/registros/${id}/antivetorial`),
     ]);
     if (versao !== estado.renderAtual) return "";
     estado.registroAberto = registro;
@@ -88,6 +89,7 @@ export function criarTelas(render) {
       boletins,
       editar: podeEditarRegistro(registro, usuarioAtual()),
       supervisor: usuarioAtual().role === "SUPERVISOR",
+      antivetorial,
     });
   }
 

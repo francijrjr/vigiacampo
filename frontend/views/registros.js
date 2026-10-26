@@ -30,6 +30,12 @@ function tabelaImoveis(registro) {
   }).join("")}</tbody></table></div>`;
 }
 
+function cartaoAntivetorial(registro, dados = {}) {
+  const linhas = dados.linhas?.length || 0;
+  const preenchida = linhas > 0;
+  return `<section class="antivetorial-resumo ${preenchida ? "preenchida" : ""}"><div class="antivetorial-resumo-icone">${icone("clipboard-list")}</div><div class="antivetorial-resumo-copy"><span class="eyebrow">Serviço especializado</span><h2>Serviço antivetorial</h2><p>${preenchida ? "A ficha de campo está preenchida e pronta para consulta ou impressão." : "Registre a pesquisa entomológica, os focos encontrados e o tratamento aplicado."}</p><div class="antivetorial-resumo-metricas"><span>${icone(preenchida ? "circle-check" : "circle-dashed")}${preenchida ? "Ficha preenchida" : "Aguardando preenchimento"}</span><span>${icone("clipboard-list")}${linhas ? `${linhas} linhas de campo` : "20 linhas disponíveis"}</span><span>${icone("download")}PDF oficial</span></div></div><div class="antivetorial-resumo-acoes"><a class="primary" href="#antivetorial/${registro.id}">${icone("file-pen-line")}<span>${preenchida ? "Abrir ficha" : "Preencher ficha"}</span></a>${preenchida ? `<button class="secondary" data-action="pdf-antivetorial">${icone("download")}<span>Baixar PDF</span></button>` : ""}</div></section>`;
+}
+
 export function tabelaRegistros(registros) {
   if (!registros.length)
     return empty(
@@ -66,6 +72,7 @@ export function detalheRegistro({
   boletins,
   editar,
   supervisor,
+  antivetorial,
 }) {
   return (
     `<a class="subtle-link" href="#registros">${icone("arrow-left")} Voltar aos registros</a><br><br>` +
@@ -74,8 +81,7 @@ export function detalheRegistro({
       `${registro.municipio} · Área ${registro.codigo_area} · Ciclo ${registro.ciclo}`,
       badge(registro),
     ) +
-    cartoesBoletins(boletins, registro.id, editar) +
-    (registro.atividade === "PVE" ? painel("Serviço antivetorial", `<p>Preencha a ficha diária de campo e gere o PDF oficial.</p><a class="text-button" href="#antivetorial/${registro.id}">Abrir ficha antivetorial ${icone("arrow-right")}</a>`) : "") +
+    (registro.atividade === "PVE" ? cartaoAntivetorial(registro, antivetorial) : cartoesBoletins(boletins, registro.id, editar)) +
     `<div class="actions" style="margin-bottom:24px">${editar ? botao("Editar informações", "editar-registro") : ""}${registro.status !== "SYNCED" ? botao("Enviar registro", "enviar-registro", "primary") : ""}${botao("Duplicar", "duplicar")}${supervisor ? botao("Baixar PDF ↓", "pdf") : ""}${editar ? botao("Excluir registro", "excluir-registro", "danger") : ""}</div>` +
     `<div class="detail-grid">${painel("Informações do dia", `<div class="detail-body"><dl class="data-list"><div><dt>Código de série</dt><dd>${e(registro.codigo_serie || "Não informado")}</dd></div><div><dt>Atividade</dt><dd>${e(atividades[registro.atividade])}</dd></div><div><dt>Zona / bairro</dt><dd>${e(registro.zona || "Não informado")}</dd></div><div><dt>Imóveis</dt><dd>${registro.resumo_imoveis_trabalhados}</dd></div><div><dt>Pendências</dt><dd>${registro.resumo_pendencias}</dd></div><div><dt>Depósitos inspecionados</dt><dd>${registro.resumo_depositos_inspecionados}</dd></div><div><dt>Exemplares encontrados</dt><dd>${registro.resumo_exemplares}</dd></div></dl><p class="muted">Observações</p><p style="white-space:pre-wrap">${e(registro.observacoes || "Nenhuma observação.")}</p></div>`)}
     ${painel("Quarteirões", registro.quarteiroes.length ? registro.quarteiroes.map((quarteirao) => `<div class="item-card"><div><strong>Quarteirão ${e(quarteirao.numero)}</strong><p>${e(quarteirao.logradouro || "Rua não informada")}</p></div>${editar ? `<div class="actions">${botao("Editar", `editar-quarteirao:${quarteirao.id}`)}${botao("Excluir", `excluir-quarteirao:${quarteirao.id}`, "danger")}</div>` : ""}</div>`).join("") : empty("Cadastre o primeiro quarteirão", "Organize os imóveis por rua ou quarteirão."), editar ? botao("+ Adicionar", "novo-quarteirao") : "")}</div>` +
