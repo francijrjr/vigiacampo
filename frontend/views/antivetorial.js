@@ -1,5 +1,6 @@
 import { escapar as e } from "./formularios.js";
 import { botao, titulo } from "./componentes.js";
+import { legendaDepositos } from "./legenda-depositos.js";
 
 const depositos = ["a1", "a2", "b", "c", "d1", "d2", "e"];
 const campos = [
@@ -33,6 +34,7 @@ export function fichaAntivetorial({ registro, dados = {}, editar }) {
   <form id="antivetorial-form" class="antivetorial-form" data-editavel="${editar}">
     <section class="panel antivetorial-sheet"><div class="antivetorial-header"><p>Prefeitura Municipal de ${e(registro.municipio)}</p><strong>REGISTRO DIÁRIO DO SERVIÇO ANTIVETORIAL</strong></div>
     <div class="form-grid antivetorial-cabecalho">${campos.map(([nome, rotulo, tipo]) => `<label>${e(rotulo)}${input(nome, valores[nome], tipo)}</label>`).join("")}</div>
+    ${legendaDepositos()}
     <div class="table-wrap antivetorial-table"><table><thead><tr><th>Nº</th><th>Logradouro</th><th>Nº</th><th>Tipo</th><th>Visita</th>${depositos.map((nome) => `<th>${nome.toUpperCase()}</th>`).join("")}<th>Foco</th><th>Tratamento</th></tr></thead><tbody>${Array.from({ length: 20 }, (_, index) => linha(index + 1, linhas[index + 1])).join("")}</tbody></table></div>
     <label class="wide">Observações<textarea name="observacoes" rows="3">${e(valores.observacoes || "")}</textarea></label>
     ${editar ? `<footer><button class="primary" type="submit">Salvar ficha</button></footer>` : ""}</section></form>`;

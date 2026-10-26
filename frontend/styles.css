@@ -431,6 +431,20 @@ td strong {
 td small {
   font-size: 11px;
 }
+.depositos-legenda {
+  margin: 18px 24px;
+  padding: 16px;
+  border: 1px solid #dce7dc;
+  border-radius: 10px;
+  background: #f7faf5;
+}
+.depositos-legenda > div p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+.depositos-legenda dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; margin: 14px 0 0; }
+.depositos-legenda dl > div { display: flex; gap: 8px; min-width: 0; }
+.depositos-legenda dt { align-self: flex-start; min-width: 28px; padding: 3px 5px; border-radius: 5px; background: var(--green); color: #fff; font-size: 11px; font-weight: 700; text-align: center; }
+.depositos-legenda dd { margin: 0; font-size: 11px; line-height: 1.35; }
+.depositos-legenda dd strong, .depositos-legenda dd span { display: block; }
+.depositos-legenda dd span { color: var(--muted); margin-top: 2px; }
 .imovel-com-anexo td {
   padding-bottom: 7px;
 }

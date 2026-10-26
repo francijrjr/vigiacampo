@@ -111,3 +111,8 @@
 .antivetorial-table td:nth-child(2) input { min-width: 170px; }
 .antivetorial-table td:last-child input { min-width: 110px; }
 .antivetorial-form footer { margin-top: 16px; }
+
+@media (max-width: 900px) {
+  .depositos-legenda { margin: 14px 16px; }
+  .depositos-legenda dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

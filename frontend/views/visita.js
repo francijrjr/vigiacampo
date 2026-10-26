@@ -2,6 +2,7 @@ import { colecoes, escapar as e, pendencias, tipos } from "./formularios.js";
 import { icone } from "./icones.js";
 
 import { empty, botao, titulo } from "./componentes.js";
+import { legendaDepositos } from "./legenda-depositos.js";
 
 export function visita({
   registro: registro,
@@ -42,7 +43,7 @@ export function visita({
     `<a class="subtle-link" href="#registro/${registro.id}">${icone("arrow-left")} Voltar ao registro</a><br><br>` +
     titulo(
       `Visita ao imóvel nº ${imovel.numero}`,
-      `${tipos[imovel.tipo]} · ${pendencias[imovel.pendencia]}`,
+    `${tipos[imovel.tipo]} · ${pendencias[imovel.pendencia]}`,
       editar ? botao("Editar imóvel", "editar-imovel") : "",
     ) +
     `<section class="panel"><div class="visit-tabs">${Object.entries(abas)
@@ -52,6 +53,6 @@ export function visita({
       )
       .join(
         "",
-      )}</div><div class="panel-heading"><h2>${e(abas[abaVisita])}</h2>${editar ? botao("+ Adicionar", abaVisita === "fotos" ? "nova-foto" : "novo-item", "primary") : ""}</div>${conteudo}</section>${editar ? botao("Excluir imóvel", "excluir-imovel", "danger") : ""}`
+      )}</div><div class="panel-heading"><h2>${e(abas[abaVisita])}</h2>${editar ? botao("+ Adicionar", abaVisita === "fotos" ? "nova-foto" : "novo-item", "primary") : ""}</div>${abaVisita === "inspecoes" ? legendaDepositos() : ""}${conteudo}</section>${editar ? botao("Excluir imóvel", "excluir-imovel", "danger") : ""}`
   );
 }

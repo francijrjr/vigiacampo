@@ -28,6 +28,15 @@ export const pendencias = {
   RECUSA: "Recusa",
   OUTRA: "Outra",
 };
+export const categoriasDepositos = {
+  A1: ["Água elevada", "Caixa-d’água, tanque elevado e outros reservatórios elevados."],
+  A2: ["Água ao nível do solo", "Cisterna, tonel, tambor e outros reservatórios no solo."],
+  B: ["Depósitos móveis", "Vasos, pratos, baldes, garrafas e recipientes que podem ser removidos."],
+  C: ["Depósitos fixos", "Calha, laje, ralo, piscina e outras estruturas fixas."],
+  D1: ["Pneus", "Pneus e câmaras de ar expostos à chuva."],
+  D2: ["Recipientes descartáveis", "Lixo, sucata, entulho e materiais descartados que acumulam água."],
+  E: ["Naturais", "Ocos de árvores, bromélias e outros criadouros naturais."],
+};
 export const visitas = {
   NORMAL: "Normal",
   RECUSA: "Recusa",
@@ -72,9 +81,9 @@ export const camposImovel = [
 export const colecoes = {
   inspecoes: {
     titulo: "Inspeções",
-    campos: ["a1", "a2", "b", "c", "d1", "d2", "e"].map((k) => [
-      k,
-      `Depósitos ${k.toUpperCase()}`,
+    campos: Object.entries(categoriasDepositos).map(([codigo, [nome]]) => [
+      codigo.toLowerCase(),
+      `${codigo} · ${nome}`,
       "number",
     ]),
   },
