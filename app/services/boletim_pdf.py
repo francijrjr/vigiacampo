@@ -32,6 +32,12 @@ def _logo_crato():
     return next((caminho for caminho in candidatos if caminho.exists()), None)
 
 
+def _numero_lado(valor):
+    """Garante que PDFs antigos não voltem a imprimir direção em vez de número."""
+    chave = str(valor or "").strip().lower()
+    return {"direito": "1", "direita": "1", "esquerdo": "2", "esquerda": "2"}.get(chave, valor or "")
+
+
 def gerar_boletim_pdf(boletim):
     arquivo = BytesIO()
     largura, altura = A4
@@ -40,7 +46,7 @@ def gerar_boletim_pdf(boletim):
     registros = []
     colunas = [metade * .60, metade * .14, metade * .08, metade * .18]
     for imovel in boletim.imoveis:
-        valores = [imovel.logradouro or "", imovel.numero, imovel.lado or "", TIPOS_BOLETIM[imovel.tipo.value][0]]
+        valores = [imovel.logradouro or "", imovel.numero, _numero_lado(imovel.lado), TIPOS_BOLETIM[imovel.tipo.value][0]]
         altura_linha = max(13, max(_paragrafo(valor, coluna - 6)[1] + 4 for valor, coluna in zip(valores, colunas)))
         registros.append((valores, altura_linha))
 
