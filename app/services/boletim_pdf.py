@@ -126,17 +126,17 @@ def gerar_boletim_pdf(boletim):
         pdf.setStrokeColorRGB(.15, .15, .15)
         pdf.setLineWidth(.45)
         cabecalho(numero)
-        # Bloco de identificação igual ao formulário físico: quatro linhas à esquerda
-        # e três linhas à direita, com rótulo e preenchimento em células separadas.
-        esquerda, direita = MARGEM, MARGEM + 308
-        campo_linha(esquerda, 654, 278, "UF", boletim.uf, 43)
-        campo_linha(esquerda, 637, 278, "Distrito", getattr(boletim, "distrito", ""), 62)
-        campo_linha(esquerda, 620, 278, "Município", boletim.municipio, 66)
-        campo_linha(esquerda, 603, 278, "Localidade", boletim.localidade, 72)
-        campo_linha(direita, 637, 245, "Subdistr.", getattr(boletim, "subdistrito", ""), 66)
-        campo_linha(direita, 620, 245, "Sublocal", boletim.sublocal, 66)
+        # Bloco de identificação equilibrado em duas colunas, dentro das margens da folha.
+        esquerda, largura_coluna = MARGEM, 245
+        direita = esquerda + largura_coluna + 21
+        campo_linha(esquerda, 654, largura_coluna, "UF", boletim.uf, 43)
+        campo_linha(esquerda, 637, largura_coluna, "Distrito", getattr(boletim, "distrito", ""), 62)
+        campo_linha(esquerda, 620, largura_coluna, "Município", boletim.municipio, 66)
+        campo_linha(esquerda, 603, largura_coluna, "Localidade", boletim.localidade, 72)
+        campo_linha(direita, 637, largura_coluna, "Subdistr.", getattr(boletim, "subdistrito", ""), 66)
+        campo_linha(direita, 620, largura_coluna, "Sublocal", boletim.sublocal, 66)
         campo_linha(direita, 603, 105, "Categoria", boletim.categoria, 62)
-        campo_linha(direita + 105, 603, 140, "Quart. nº", boletim.quarteirao_numero, 65)
+        campo_linha(direita + 105, 603, largura_coluna - 105, "Quart. nº", boletim.quarteirao_numero, 65)
 
         for coluna, grupo in enumerate(grupos):
             x, y = MARGEM + coluna * (metade + 12), topo_tabela
@@ -177,11 +177,25 @@ def gerar_boletim_pdf(boletim):
                 pdf.drawRightString(x + util / 2 - 8, y - 10, str(total))
             y -= 15
 
-        campo(MARGEM + 10, 104, 335, 20, "Nome", boletim.responsavel)
-        pdf.rect(MARGEM + 10, 84, 335, 20)
-        pdf.setFont("Helvetica", 8)
-        pdf.drawString(MARGEM + 15, 92, "ASSINATURA")
-        campo(largura - MARGEM - 150, 91, 150, 20, "Data", boletim.data.strftime("%d/%m/%Y"))
+        # Rodapé amplo: nome legível, campo reservado para assinatura e data separada.
+        assinatura_x, assinatura_largura = MARGEM + 10, 335
+        pdf.rect(assinatura_x, 92, assinatura_largura, 18)
+        pdf.setFont("Helvetica-Bold", 7.5)
+        pdf.drawString(assinatura_x + 7, 99, "NOME DO RESPONSÁVEL")
+        pdf.setFont("Helvetica", 8.5)
+        pdf.drawString(assinatura_x + 105, 99, str(boletim.responsavel or ""))
+        pdf.rect(assinatura_x, 55, assinatura_largura, 37)
+        pdf.setFont("Helvetica-Bold", 8)
+        pdf.drawString(assinatura_x + 7, 82, "ASSINATURA")
+        pdf.setLineWidth(.7)
+        pdf.line(assinatura_x + 12, 64, assinatura_x + assinatura_largura - 12, 64)
+        pdf.setLineWidth(.45)
+        data_x, data_largura = largura - MARGEM - 150, 150
+        pdf.rect(data_x, 67, data_largura, 25)
+        pdf.setFont("Helvetica-Bold", 8)
+        pdf.drawString(data_x + 8, 82, "DATA")
+        pdf.setFont("Helvetica", 9)
+        pdf.drawString(data_x + 8, 72, boletim.data.strftime("%d/%m/%Y"))
         pdf.showPage()
     pdf.save()
     return arquivo.getvalue()
