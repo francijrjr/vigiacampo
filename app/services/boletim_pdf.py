@@ -78,6 +78,16 @@ def gerar_boletim_pdf(boletim):
         paragrafo, _ = _paragrafo(valor, w - 10)
         paragrafo.drawOn(pdf, x + 5, y - h + 3)
 
+    def campo_linha(x, y, w, rotulo, valor, largura_rotulo):
+        """Campo do cabeçalho oficial: rótulo à esquerda e valor manuscrito ao lado."""
+        altura_campo = 17
+        pdf.rect(x, y - altura_campo, w, altura_campo)
+        pdf.line(x + largura_rotulo, y, x + largura_rotulo, y - altura_campo)
+        pdf.setFont("Helvetica", 6.7)
+        pdf.drawCentredString(x + largura_rotulo / 2, y - 11, rotulo.upper())
+        paragrafo, h = _paragrafo(valor, w - largura_rotulo - 7)
+        paragrafo.drawOn(pdf, x + largura_rotulo + 4, y - altura_campo + max(2, (altura_campo - h) / 2))
+
     def cabecalho(numero):
         logo = _logo_crato()
         if logo:
@@ -116,12 +126,17 @@ def gerar_boletim_pdf(boletim):
         pdf.setStrokeColorRGB(.15, .15, .15)
         pdf.setLineWidth(.45)
         cabecalho(numero)
-        campo(MARGEM, 654, 140, 19, "UF", boletim.uf)
-        campo(MARGEM, 636, 245, 19, "Município", boletim.municipio)
-        campo(MARGEM + 245, 636, util - 245, 19, "Sublocalidade", boletim.sublocal)
-        campo(MARGEM, 610, 220, 19, "Localidade", boletim.localidade)
-        campo(MARGEM + 220, 610, 150, 19, "Categoria", boletim.categoria)
-        campo(largura - MARGEM - 130, 610, 130, 19, "Quart. nº", boletim.quarteirao_numero)
+        # Bloco de identificação igual ao formulário físico: quatro linhas à esquerda
+        # e três linhas à direita, com rótulo e preenchimento em células separadas.
+        esquerda, direita = MARGEM, MARGEM + 308
+        campo_linha(esquerda, 654, 278, "UF", boletim.uf, 43)
+        campo_linha(esquerda, 637, 278, "Distrito", getattr(boletim, "distrito", ""), 62)
+        campo_linha(esquerda, 620, 278, "Município", boletim.municipio, 66)
+        campo_linha(esquerda, 603, 278, "Localidade", boletim.localidade, 72)
+        campo_linha(direita, 637, 245, "Subdistr.", getattr(boletim, "subdistrito", ""), 66)
+        campo_linha(direita, 620, 245, "Sublocal", boletim.sublocal, 66)
+        campo_linha(direita, 603, 105, "Categoria", boletim.categoria, 62)
+        campo_linha(direita + 105, 603, 140, "Quart. nº", boletim.quarteirao_numero, 65)
 
         for coluna, grupo in enumerate(grupos):
             x, y = MARGEM + coluna * (metade + 12), topo_tabela

@@ -29,7 +29,9 @@ def gerar_pdf(registro):
     fechamento = SimpleNamespace(**totais, total=len(imoveis))
     boletim = SimpleNamespace(
         uf="CE",
+        distrito=registro.codigo_serie or "",
         municipio=registro.municipio,
+        subdistrito=registro.codigo_area or "",
         sublocal=registro.zona or "",
         localidade=registro.zona or registro.municipio,
         categoria="Urbana",
