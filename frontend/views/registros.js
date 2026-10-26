@@ -10,6 +10,7 @@ import { icone } from "./icones.js";
 import { dataBr } from "../utils/datas.js";
 import { badge, empty, painel, botao, titulo } from "./componentes.js";
 import { filaPainel } from "./layout.js";
+import { ordenarImoveisPorNumero } from "../utils/ordenacao.js";
 
 export function tabelaRegistros(registros) {
   if (!registros.length)
@@ -63,7 +64,7 @@ export function detalheRegistro({
     painel(
       "Imóveis e visitas",
       registro.imoveis.length
-        ? `<div class="table-wrap"><table><thead><tr><th>Imóvel</th><th>Quarteirão</th><th>Tipo</th><th>Pendência</th><th></th></tr></thead><tbody>${registro.imoveis.map((imovel) => `<tr><td><strong>Nº ${e(imovel.numero)}</strong><small>${e(imovel.complemento)}</small></td><td>${e(registro.quarteiroes.find((quarteirao) => quarteirao.id === imovel.quarteirao_id)?.numero || "—")}</td><td>${e(tipos[imovel.tipo])}</td><td>${e(pendencias[imovel.pendencia])}</td><td><a class="text-button" href="#visita/${registro.id}/${imovel.id}">Abrir visita ${icone("arrow-right")}</a></td></tr>`).join("")}</tbody></table></div>`
+        ? `<div class="table-wrap"><table><thead><tr><th>Imóvel</th><th>Quarteirão</th><th>Tipo</th><th>Pendência</th><th></th></tr></thead><tbody>${ordenarImoveisPorNumero(registro.imoveis).map((imovel) => `<tr><td><strong>Nº ${e(imovel.numero)}</strong><small>${e(imovel.complemento)}</small></td><td>${e(registro.quarteiroes.find((quarteirao) => quarteirao.id === imovel.quarteirao_id)?.numero || "—")}</td><td>${e(tipos[imovel.tipo])}</td><td>${e(pendencias[imovel.pendencia])}</td><td><a class="text-button" href="#visita/${registro.id}/${imovel.id}">Abrir visita ${icone("arrow-right")}</a></td></tr>`).join("")}</tbody></table></div>`
         : empty(
             "Ainda não há imóveis",
             "Adicione um imóvel para registrar inspeções, coletas e tratamentos.",

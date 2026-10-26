@@ -1,5 +1,6 @@
 import { escapar as e, tipos } from "./formularios.js";
 import { icone } from "./icones.js";
+import { ordenarImoveisPorNumero } from "../utils/ordenacao.js";
 
 export const funcoesResponsavel = {
   AGENTE: "Agente",
@@ -73,13 +74,14 @@ export function cartoesBoletins(boletins, registroId, editavel) {
 }
 
 export function telaBoletim(boletim) {
+  const imoveisOrdenados = ordenarImoveisPorNumero(boletim.imoveis);
   const campo = (label, valor) =>
     `<div class="ficha-campo"><span>${e(label)}</span><strong>${e(valor || "—")}</strong></div>`;
   const qtd = Math.max(12, Math.ceil(boletim.imoveis.length / 2));
   function tabela(inicio) {
     const linhas = Array.from(
       { length: qtd },
-      (_, i) => boletim.imoveis[inicio + i],
+      (_, i) => imoveisOrdenados[inicio + i],
     );
     return `<div class="ficha-table-wrap"><table class="ficha-table"><thead><tr><th>Rua ou logradouro</th><th>Número</th><th>Lado</th><th>Tipo</th><th class="ficha-acoes">Visita</th></tr></thead><tbody>${linhas.map((imovel) => (imovel ? `<tr><td>${e(imovel.logradouro || "—")}</td><td>${e(imovel.numero)}</td><td>${e(imovel.lado || "—")}</td><td><abbr title="${e(tipos[imovel.tipo])}">${siglas[imovel.tipo]}</abbr></td><td class="ficha-acoes"><div><a class="icon-button" href="#visita/${boletim.registro_id}/${imovel.id}" aria-label="Abrir visita do imóvel ${e(imovel.numero)}" title="Abrir visita">${icone("arrow-right")}</a>${boletim.editavel ? `<button class="icon-button" data-action="editar-imovel-boletim:${imovel.id}" aria-label="Editar imóvel ${e(imovel.numero)}" title="Editar imóvel">${icone("pencil")}</button><button class="icon-button" data-action="excluir-imovel-boletim:${imovel.id}" aria-label="Excluir imóvel ${e(imovel.numero)}" title="Excluir imóvel">${icone("trash-2")}</button>` : ""}</div></td></tr>` : '<tr class="linha-vazia"><td>&nbsp;</td><td></td><td></td><td></td><td class="ficha-acoes"></td></tr>')).join("")}</tbody></table></div>`;
   }

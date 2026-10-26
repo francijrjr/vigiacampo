@@ -29,6 +29,7 @@ const ASSETS = [
   "/static/utils/datas.js",
   "/static/utils/download.js",
   "/static/utils/geolocalizacao.js",
+  "/static/utils/ordenacao.js",
   "/static/views/boletim.js",
   "/static/views/antivetorial.js",
   "/static/views/componentes.js",
