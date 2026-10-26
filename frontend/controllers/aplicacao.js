@@ -15,6 +15,7 @@ const {
   registros,
   detalheRegistro,
   visita,
+  antivetorial,
   equipe,
   relatorios,
   conta,
@@ -31,7 +32,7 @@ async function render() {
     location.hash.slice(1) || "inicio"
   ).split("/");
   estrutura(
-    ["registro", "visita", "boletim"].includes(rota) ? "registros" : rota,
+    ["registro", "visita", "boletim", "antivetorial"].includes(rota) ? "registros" : rota,
   );
   try {
     let html;
@@ -39,6 +40,7 @@ async function render() {
     else if (rota === "registros") html = await registros();
     else if (rota === "registro") html = await detalheRegistro(id, numero);
     else if (rota === "visita") html = await visita(id, imovelId, numero);
+    else if (rota === "antivetorial") html = await antivetorial(id, numero);
     else if (rota === "boletim") {
       const dados = await api(`/registros/${id}/boletins/${imovelId}`);
       if (numero !== estado.renderAtual) return;
@@ -52,6 +54,12 @@ async function render() {
     else html = empty("Página não encontrada", "Use o menu para continuar.");
     if (numero !== estado.renderAtual) return;
     document.querySelector("#content").innerHTML = html;
+    const fichaAntivetorial = document.querySelector("#antivetorial-form");
+    if (fichaAntivetorial)
+      fichaAntivetorial.onsubmit = async (evento) => {
+        evento.preventDefault();
+        try { await acao("salvar-antivetorial"); } catch (erro) { avisar(erro.message); }
+      };
     const form = document.querySelector("#filters");
     if (form)
       form.onsubmit = (ev) => {

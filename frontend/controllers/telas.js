@@ -17,6 +17,7 @@ import { visita as visitaView } from "../views/visita.js";
 import { equipe as equipeView } from "../views/equipe.js";
 import { relatorios as relatoriosView } from "../views/relatorios.js";
 import { conta as contaView } from "../views/conta.js";
+import { fichaAntivetorial } from "../views/antivetorial.js";
 
 // Controllers consultam modelos, atualizam o estado e entregam dados às views.
 export function criarTelas(render) {
@@ -107,6 +108,20 @@ export function criarTelas(render) {
     });
   }
 
+  async function antivetorial(id, versao) {
+    const [registro, dados] = await Promise.all([
+      consultarRegistro(id),
+      api(`/registros/${id}/antivetorial`),
+    ]);
+    if (versao !== estado.renderAtual) return "";
+    estado.registroAberto = registro;
+    return fichaAntivetorial({
+      registro,
+      dados: { agente: usuarioAtual().full_name, ...dados },
+      editar: podeEditarRegistro(registro, usuarioAtual()),
+    });
+  }
+
   async function equipe(versao) {
     const pagina = estado.pagina;
     const dados = await consultarEquipe(pagina);
@@ -130,6 +145,7 @@ export function criarTelas(render) {
     registros,
     detalheRegistro,
     visita,
+    antivetorial,
     equipe,
     relatorios,
     conta: () => contaView(usuarioAtual()),

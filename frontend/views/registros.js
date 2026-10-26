@@ -26,7 +26,7 @@ export function registros({ dados, filtros, pagina, pendentes }) {
     titulo(
       "Registros diários",
       "O histórico de cada ação em campo.",
-      botao("+ Novo registro", "novo-registro", "primary"),
+      `<div class="actions">${botao("+ Novo registro", "novo-registro", "primary")}${botao("Serviço antivetorial", "novo-antivetorial", "secondary")}</div>`,
     ) +
     filaPainel(pendentes) +
     `<section class="panel"><form id="filters" class="filters"><label>De<input type="date" name="data_inicio" value="${e(filtros.data_inicio)}"></label><label>Até<input type="date" name="data_fim" value="${e(filtros.data_fim)}"></label><label>Zona / bairro<input name="zona" value="${e(filtros.zona)}" placeholder="Todas as zonas"></label><label>Situação<select name="status"><option value="">Todas</option>${Object.entries(
@@ -56,6 +56,7 @@ export function detalheRegistro({
       badge(registro),
     ) +
     cartoesBoletins(boletins, registro.id, editar) +
+    (registro.atividade === "PVE" ? painel("Serviço antivetorial", `<p>Preencha a ficha diária de campo e gere o PDF oficial.</p><a class="text-button" href="#antivetorial/${registro.id}">Abrir ficha antivetorial ${icone("arrow-right")}</a>`) : "") +
     `<div class="actions" style="margin-bottom:24px">${editar ? botao("Editar informações", "editar-registro") : ""}${registro.status !== "SYNCED" ? botao("Enviar registro", "enviar-registro", "primary") : ""}${botao("Duplicar", "duplicar")}${supervisor ? botao("Baixar PDF ↓", "pdf") : ""}${editar ? botao("Excluir registro", "excluir-registro", "danger") : ""}</div>` +
     `<div class="detail-grid">${painel("Informações do dia", `<div class="detail-body"><dl class="data-list"><div><dt>Código de série</dt><dd>${e(registro.codigo_serie || "Não informado")}</dd></div><div><dt>Atividade</dt><dd>${e(atividades[registro.atividade])}</dd></div><div><dt>Zona / bairro</dt><dd>${e(registro.zona || "Não informado")}</dd></div><div><dt>Imóveis</dt><dd>${registro.resumo_imoveis_trabalhados}</dd></div><div><dt>Pendências</dt><dd>${registro.resumo_pendencias}</dd></div><div><dt>Depósitos inspecionados</dt><dd>${registro.resumo_depositos_inspecionados}</dd></div><div><dt>Exemplares encontrados</dt><dd>${registro.resumo_exemplares}</dd></div></dl><p class="muted">Observações</p><p style="white-space:pre-wrap">${e(registro.observacoes || "Nenhuma observação.")}</p></div>`)}
     ${painel("Quarteirões", registro.quarteiroes.length ? registro.quarteiroes.map((quarteirao) => `<div class="item-card"><div><strong>Quarteirão ${e(quarteirao.numero)}</strong><p>${e(quarteirao.logradouro || "Rua não informada")}</p></div>${editar ? `<div class="actions">${botao("Editar", `editar-quarteirao:${quarteirao.id}`)}${botao("Excluir", `excluir-quarteirao:${quarteirao.id}`, "danger")}</div>` : ""}</div>`).join("") : empty("Cadastre o primeiro quarteirão", "Organize os imóveis por rua ou quarteirão."), editar ? botao("+ Adicionar", "novo-quarteirao") : "")}</div>` +

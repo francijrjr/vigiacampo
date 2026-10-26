@@ -1,4 +1,3 @@
-// Busca limitada no tempo: aproveita leituras melhores sem rastrear continuamente.
 export function buscarLocalizacao({ atualizar, concluir, falhar }, {
   geolocation = navigator.geolocation,
   agendar = setTimeout,
@@ -7,12 +6,14 @@ export function buscarLocalizacao({ atualizar, concluir, falhar }, {
 } = {}) {
   let encerrado = false, melhor, observador;
   const limite = agendar(() => finalizar(), 20000);
+
   function parar() {
     if (encerrado) return;
     encerrado = true;
     cancelar(limite);
     if (observador !== undefined) geolocation.clearWatch(observador);
   }
+
   function finalizar(erro) {
     if (encerrado) return;
     parar();
@@ -32,7 +33,6 @@ export function buscarLocalizacao({ atualizar, concluir, falhar }, {
       if (accuracy <= 50) finalizar();
     }, (erro) => {
       if (encerrado) return;
-      // Permissão negada é definitiva; timeout/indisponibilidade podem ser transitórios.
       if (erro.code === 1) finalizar(erro);
     }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
     if (encerrado) geolocation.clearWatch(observador);

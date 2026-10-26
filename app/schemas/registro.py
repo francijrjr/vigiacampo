@@ -264,6 +264,45 @@ class RegistroDiarioResponse(RegistroDiarioBase):
     imoveis: List[ImovelResponse] = Field(default_factory=list)
 
 
+class AntivetorialLinha(DadosEntrada):
+    ordem: int = Field(..., ge=1, le=20)
+    logradouro: Optional[str] = Field(None, max_length=255)
+    numero: Optional[str] = Field(None, max_length=20)
+    tipo_imovel: Optional[str] = Field(None, max_length=30)
+    visita: Optional[str] = Field(None, max_length=20)
+    a1: int = Field(0, ge=0)
+    a2: int = Field(0, ge=0)
+    b: int = Field(0, ge=0)
+    c: int = Field(0, ge=0)
+    d1: int = Field(0, ge=0)
+    d2: int = Field(0, ge=0)
+    e: int = Field(0, ge=0)
+    foco: bool = False
+    tratamento: Optional[str] = Field(None, max_length=30)
+
+
+class AntivetorialDados(DadosEntrada):
+    codigo_localidade: Optional[str] = Field(None, max_length=120)
+    categoria_localidade: Optional[str] = Field(None, max_length=80)
+    zona: Optional[str] = Field(None, max_length=80)
+    conclusao: Optional[str] = Field(None, max_length=20)
+    atividade: Optional[str] = Field(None, max_length=120)
+    agente: Optional[str] = Field(None, max_length=150)
+    supervisor: Optional[str] = Field(None, max_length=150)
+    data_entrada: Optional[date] = None
+    data_conclusao: Optional[date] = None
+    laboratorio: Optional[str] = Field(None, max_length=150)
+    laboratorista: Optional[str] = Field(None, max_length=150)
+    observacoes: Optional[str] = Field(None, max_length=2000)
+    linhas: List[AntivetorialLinha] = Field(default_factory=list, max_length=20)
+
+    @model_validator(mode="after")
+    def linhas_unicas(self):
+        if len({linha.ordem for linha in self.linhas}) != len(self.linhas):
+            raise ValueError("Cada linha da ficha deve ter uma ordem única.")
+        return self
+
+
 
 class RegistroDiarioListItem(DadosEntrada):
     codigo_serie: Optional[str] = None

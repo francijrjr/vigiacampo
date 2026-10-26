@@ -79,6 +79,7 @@ class RegistroDiario(Base):
     status = Column(SAEnum(StatusRegistro), default=StatusRegistro.DRAFT, nullable=False)
     concluido = Column(Boolean, default=False)
     observacoes = Column(Text, nullable=True)
+    antivetorial = Column(JSON, nullable=True)
     synced_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=agora_utc)
     updated_at = Column(DateTime, default=agora_utc, onupdate=agora_utc)

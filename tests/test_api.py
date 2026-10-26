@@ -288,6 +288,32 @@ def test_fotos_e_pdf(cliente):
     assert not (Path(settings.UPLOAD_DIR)/foto['filename']).exists()
 
 
+def test_ficha_antivetorial_preenchimento_pdf_e_permissoes(cliente):
+    agente = headers(cliente)
+    registro_antivetorial = registro(cliente, agente, atividade='PVE')
+    base = f"/api/v1/registros/{registro_antivetorial['id']}/antivetorial"
+    ficha = {
+        'codigo_localidade': '2303909 - Chaval',
+        'categoria_localidade': 'Urbana',
+        'zona': '01',
+        'conclusao': 'Concluído',
+        'agente': 'Agente de Campo',
+        'linhas': [{'ordem': 1, 'logradouro': 'Rua Principal', 'numero': '10',
+                    'tipo_imovel': 'R', 'visita': 'NORMAL', 'a1': 2, 'b': 1,
+                    'foco': True, 'tratamento': 'Larvicida'}],
+    }
+    salvo = cliente.put(base, headers=agente, json=ficha)
+    assert salvo.status_code == 200, salvo.text
+    assert salvo.json()['linhas'][0]['a1'] == 2
+    assert cliente.get(base, headers=agente).json()['codigo_localidade'] == '2303909 - Chaval'
+    pdf = cliente.get(base + '/pdf', headers=agente)
+    assert pdf.status_code == 200, pdf.text
+    assert pdf.headers['content-type'].startswith('application/pdf')
+    assert pdf.content.startswith(b'%PDF-')
+    assert cliente.get(base, headers=headers(cliente, 'externo')).status_code == 403
+    assert cliente.put(base, headers=agente, json={**ficha, 'linhas': [{'ordem': 1}, {'ordem': 1}]}).status_code == 422
+
+
 def test_sync_atomico_e_quarteirao_local(cliente):
     h=headers(cliente)
     dados=dict(municipio='Fortaleza',codigo_area='1',ciclo='1',data='2026-09-15',atividade='LI',client_id='local-1',

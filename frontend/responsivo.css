@@ -98,3 +98,16 @@
   .sidebar .nav-link { min-height: 49px; padding: 4px 2px; gap: 3px; }
   .topbar { min-height: 60px; }
 }
+
+.antivetorial-sheet { padding: 22px; }
+.antivetorial-header { text-align: center; font-size: 12px; margin-bottom: 20px; }
+.antivetorial-header p { margin: 0 0 6px; text-transform: uppercase; font-size: 10px; }
+.antivetorial-cabecalho { margin-bottom: 20px; }
+.antivetorial-table { margin: 0 -2px 18px; }
+.antivetorial-table table { min-width: 1180px; font-size: 12px; }
+.antivetorial-table th, .antivetorial-table td { padding: 3px; white-space: nowrap; }
+.antivetorial-table thead th { background: #deddf7; text-align: center; }
+.antivetorial-table input { min-width: 38px; width: 100%; padding: 5px; border: 0; background: transparent; }
+.antivetorial-table td:nth-child(2) input { min-width: 170px; }
+.antivetorial-table td:last-child input { min-width: 110px; }
+.antivetorial-form footer { margin-top: 16px; }

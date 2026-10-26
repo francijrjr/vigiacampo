@@ -38,6 +38,20 @@ export function criarAcoesRegistros({ render, modal }) {
     return novoRegistro();
   }
 
+  async function executarNovoAntivetorial() {
+    modal(
+      "Novo registro antivetorial",
+      camposRegistro,
+      { municipio: usuarioAtual().municipio, codigo_serie: "20ª Ceres", data: hoje(), atividade: "PVE" },
+      async (dados) => {
+        dados.client_id = crypto.randomUUID();
+        const registro = await api("/registros/", { method: "POST", body: dados });
+        location.hash = `antivetorial/${registro.id}`;
+      },
+      "Criar ficha antivetorial",
+    );
+  }
+
   async function executarEditarRegistro() {
     const registro = estado.registroAberto;
     return modal("Editar registro", camposRegistro, registro, (dados) =>
@@ -128,6 +142,7 @@ export function criarAcoesRegistros({ render, modal }) {
 
   return {
     "novo-registro": executarNovoRegistro,
+    "novo-antivetorial": executarNovoAntivetorial,
     "editar-registro": executarEditarRegistro,
     "enviar-registro": executarEnviarRegistro,
     duplicar: executarDuplicar,

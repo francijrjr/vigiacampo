@@ -13,12 +13,11 @@ from app.db.session import engine, Base, SessionLocal
 from app.models.user import User, UserRole
 from app.core.security import get_password_hash
 
-from app.api import auth, users, registros, fotos, relatorios, manutencao, painel, boletins
+from app.api import auth, users, registros, fotos, relatorios, manutencao, painel, boletins, antivetorial
 import app.services.arquivos
 
 
 def seed_admin():
-    """Cria usuarios iniciais se o banco estiver vazio."""
     db = SessionLocal()
     try:
         if db.query(User).count() == 0:
@@ -94,6 +93,7 @@ app.include_router(relatorios.router, prefix=settings.API_V1_STR)
 app.include_router(manutencao.router, prefix=settings.API_V1_STR)
 app.include_router(painel.router, prefix=settings.API_V1_STR)
 app.include_router(boletins.router, prefix=settings.API_V1_STR)
+app.include_router(antivetorial.router, prefix=settings.API_V1_STR)
 
 
 @app.exception_handler(IntegrityError)
