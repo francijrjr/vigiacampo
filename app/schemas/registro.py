@@ -266,6 +266,8 @@ class RegistroDiarioResponse(RegistroDiarioBase):
 
 class AntivetorialLinha(DadosEntrada):
     ordem: int = Field(..., ge=1, le=20)
+    quarteirao: Optional[str] = Field(None, max_length=20)
+    lado: Optional[str] = Field(None, max_length=20)
     logradouro: Optional[str] = Field(None, max_length=255)
     numero: Optional[str] = Field(None, max_length=20)
     tipo_imovel: Optional[str] = Field(None, max_length=30)
