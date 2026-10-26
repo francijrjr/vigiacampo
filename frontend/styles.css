@@ -431,6 +431,13 @@ td strong {
 td small {
   font-size: 11px;
 }
+.imovel-com-anexo td {
+  padding-bottom: 7px;
+}
+.imovel-anexo td {
+  border-top: 0;
+  padding-top: 7px;
+}
 .badge {
   display: inline-flex;
   align-items: center;

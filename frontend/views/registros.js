@@ -12,6 +12,24 @@ import { badge, empty, painel, botao, titulo } from "./componentes.js";
 import { filaPainel } from "./layout.js";
 import { ordenarImoveisPorNumero } from "../utils/ordenacao.js";
 
+function numeroBase(numero) {
+  return String(numero || "").trim().match(/^\d+/)?.[0] || String(numero || "").trim();
+}
+
+function tabelaImoveis(registro) {
+  const imoveis = ordenarImoveisPorNumero(registro.imoveis);
+  return `<div class="table-wrap"><table><thead><tr><th>Imóvel</th><th>Quarteirão</th><th>Tipo</th><th>Pendência</th><th></th></tr></thead><tbody>${imoveis.map((imovel, indice) => {
+    const base = numeroBase(imovel.numero);
+    const anterior = imoveis[indice - 1];
+    const proximo = imoveis[indice + 1];
+    const classes = [
+      anterior && numeroBase(anterior.numero) === base ? "imovel-anexo" : "",
+      proximo && numeroBase(proximo.numero) === base ? "imovel-com-anexo" : "",
+    ].filter(Boolean).join(" ");
+    return `<tr class="${classes}"><td><strong>Nº ${e(imovel.numero)}</strong><small>${e(imovel.complemento)}</small></td><td>${e(registro.quarteiroes.find((quarteirao) => quarteirao.id === imovel.quarteirao_id)?.numero || "—")}</td><td>${e(tipos[imovel.tipo])}</td><td>${e(pendencias[imovel.pendencia])}</td><td><a class="text-button" href="#visita/${registro.id}/${imovel.id}">Abrir visita ${icone("arrow-right")}</a></td></tr>`;
+  }).join("")}</tbody></table></div>`;
+}
+
 export function tabelaRegistros(registros) {
   if (!registros.length)
     return empty(
@@ -64,7 +82,7 @@ export function detalheRegistro({
     painel(
       "Imóveis e visitas",
       registro.imoveis.length
-        ? `<div class="table-wrap"><table><thead><tr><th>Imóvel</th><th>Quarteirão</th><th>Tipo</th><th>Pendência</th><th></th></tr></thead><tbody>${ordenarImoveisPorNumero(registro.imoveis).map((imovel) => `<tr><td><strong>Nº ${e(imovel.numero)}</strong><small>${e(imovel.complemento)}</small></td><td>${e(registro.quarteiroes.find((quarteirao) => quarteirao.id === imovel.quarteirao_id)?.numero || "—")}</td><td>${e(tipos[imovel.tipo])}</td><td>${e(pendencias[imovel.pendencia])}</td><td><a class="text-button" href="#visita/${registro.id}/${imovel.id}">Abrir visita ${icone("arrow-right")}</a></td></tr>`).join("")}</tbody></table></div>`
+        ? tabelaImoveis(registro)
         : empty(
             "Ainda não há imóveis",
             "Adicione um imóvel para registrar inspeções, coletas e tratamentos.",
