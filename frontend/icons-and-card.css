@@ -768,6 +768,18 @@
 .module-stat strong { font-size: 19px; }
 .module-stat span { font-size: 10px; line-height: 1.2; }
 .module-open-btn { min-height: 44px; border-radius: 11px; font-size: 13px; }
+.module-card {
+  min-height: 250px;
+  padding: 24px;
+  border-top-width: 4px;
+}
+.module-card-top { margin-bottom: 16px; }
+.module-card-header { margin-bottom: auto; }
+.module-card-header h3 { font-size: 22px; margin-bottom: 6px; }
+.module-subtitle { margin: 0; line-height: 1.45; }
+.module-stats { margin-top: 22px; }
+.module-card-footer { padding-top: 14px; border-top: 1px solid #e5eee8; }
+.module-open-btn { justify-content: space-between; padding-inline: 16px; }
 .territorio-intro {
   display: flex;
   align-items: center;

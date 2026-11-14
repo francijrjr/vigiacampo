@@ -117,7 +117,6 @@ function cartaoModulo(modulo, usuario, dadosResumo) {
       <h3>${e(modulo.titulo)}</h3>
       <p class="module-subtitle">${e(modulo.subtitulo)}</p>
     </div>
-    <p class="module-description">${e(modulo.descricao)}</p>
     <div class="module-stats" aria-label="Indicadores do módulo ${e(modulo.titulo)}">
       ${indicadores
         .map(
@@ -143,8 +142,6 @@ export function telaModulos({
   pendentes,
 }) {
   const nome = usuario.full_name.split(" ")[0];
-  const papel =
-    usuario.role === "SUPERVISOR" ? "Supervisor" : "Agente de campo";
   const modulos = modulosDoUsuario(usuario);
   const resumosPorId = {
     reconhecimento: resumoTerritorio,
@@ -158,16 +155,6 @@ export function telaModulos({
       botao("+ Novo registro", "novo-registro", "primary"),
     ) +
     filaPainel(pendentes) +
-    `<section class="modules-Access-banner" aria-label="Identificação de acesso">
-      <div class="modules-access-info">
-        <span class="eyebrow">${icone("users")} ${e(papel)} · ${e(usuario.municipio || "PNCD")}</span>
-        <h2>Seu espaço de trabalho</h2>
-        <p>Os módulos abaixo estão liberados para sua conta.</p>
-      </div>
-      <div class="modules-access-summary">
-        <span class="modules-count-badge"><strong>${modulos.length}</strong><span>${modulos.length === 1 ? "módulo liberado" : "módulos liberados"}</span></span>
-      </div>
-    </section>` +
     `<section class="modules-section" aria-label="Módulos disponíveis">
       <div class="modules-grid">
         ${modulos
