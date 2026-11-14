@@ -1,4 +1,4 @@
-"""Rotas HTTP para o módulo de Reconhecimento Geográfico (Cadastro Territorial Permanente)."""
+"""Rotas HTTP para o módulo de Reconhecimento Geográfico."""
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import func
@@ -43,7 +43,7 @@ def consulta_escopo(db: Session, usuario: User):
 @router.get(
     "/resumo",
     response_model=ResumoTerritorio,
-    summary="Resumo do cadastro territorial permanente",
+    summary="Resumo do cadastro territorial",
 )
 def resumo_territorio(
     db: Session = Depends(get_db),
@@ -68,7 +68,7 @@ def resumo_territorio(
 @router.get(
     "/",
     response_model=List[TerritorioResponse],
-    summary="Listar quarteirões do cadastro territorial permanente",
+    summary="Listar quarteirões do cadastro territorial",
 )
 def listar_territorio(
     db: Session = Depends(get_db),
@@ -97,7 +97,7 @@ def listar_territorio(
     "/",
     response_model=TerritorioResponse,
     status_code=status.HTTP_201_CREATED,
-    summary="Cadastrar quarteirão permanente no reconhecimento geográfico",
+    summary="Cadastrar quarteirão no reconhecimento geográfico",
 )
 def criar_territorio(
     payload: TerritorioCreate,
@@ -116,7 +116,7 @@ def criar_territorio(
     if existente:
         raise HTTPException(
             status_code=409,
-            detail="Já existe um quarteirão permanente com este número nesta localidade.",
+            detail="Já existe um quarteirão com este número nesta localidade.",
         )
     item = CadastroTerritorial(
         criado_por_id=usuario.id,
@@ -131,7 +131,7 @@ def criar_territorio(
 @router.put(
     "/{territorio_id}",
     response_model=TerritorioResponse,
-    summary="Atualizar quarteirão do cadastro territorial permanente",
+    summary="Atualizar quarteirão do cadastro territorial",
 )
 def atualizar_territorio(
     territorio_id: int,
@@ -159,7 +159,7 @@ def atualizar_territorio(
     if duplicado:
         raise HTTPException(
             status_code=409,
-            detail="Já existe outro quarteirão permanente com este número nesta localidade.",
+            detail="Já existe outro quarteirão com este número nesta localidade.",
         )
     dados = payload.model_dump(exclude_unset=True)
     if "geometria" not in dados:
@@ -174,7 +174,7 @@ def atualizar_territorio(
 @router.delete(
     "/{territorio_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    summary="Excluir quarteirão do cadastro territorial permanente (restrito ao supervisor)",
+    summary="Excluir quarteirão do cadastro territorial (restrito ao supervisor)",
 )
 def excluir_territorio(
     territorio_id: int,
@@ -184,7 +184,7 @@ def excluir_territorio(
     if usuario.role != UserRole.SUPERVISOR:
         raise HTTPException(
             status_code=403,
-            detail="Somente o supervisor pode excluir itens do cadastro territorial permanente.",
+            detail="Somente o supervisor pode excluir itens do cadastro territorial.",
         )
     item = (
         consulta_escopo(db, usuario)

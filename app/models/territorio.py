@@ -1,4 +1,4 @@
-"""Cadastro territorial permanente do módulo de Reconhecimento Geográfico."""
+"""Cadastro territorial do módulo de Reconhecimento Geográfico."""
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, JSON
 from sqlalchemy.orm import relationship
 from app.db.session import Base

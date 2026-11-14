@@ -21,8 +21,8 @@ export function criarAcoesReconhecimento({ render, modal }) {
         };
     return modal(
       editando
-        ? `Editar quarteirão permanente QT ${atual?.quarteirao_numero || ""}`
-        : "Novo quarteirão permanente · Reconhecimento Geográfico",
+        ? `Editar quarteirão QT ${atual?.quarteirao_numero || ""}`
+        : "Novo quarteirão · Reconhecimento Geográfico",
       camposTerritorio,
       atual,
       (dados) =>
@@ -39,7 +39,7 @@ export function criarAcoesReconhecimento({ render, modal }) {
     const item = estado.territorioAtual.find((i) => i.id === Number(valor));
     if (
       !confirm(
-        `Excluir permanentemente o quarteirão QT ${item?.quarteirao_numero || valor} da localidade ${item?.localidade || ""}?`,
+        `Excluir o quarteirão QT ${item?.quarteirao_numero || valor} da localidade ${item?.localidade || ""}?`,
       )
     )
       return;

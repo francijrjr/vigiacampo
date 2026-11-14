@@ -29,9 +29,9 @@ export const camposTerritorio = [
 function tabelaTerritorio(itens, supervisor) {
   if (!itens.length) {
     return empty(
-      "Nenhum quarteirão permanente cadastrado",
-      "Cadastre localidades e quarteirões permanentes para estruturar o Reconhecimento Geográfico do município.",
-      botao("+ Cadastrar quarteirão permanente", "novo-territorio", "primary"),
+      "Nenhum quarteirão cadastrado",
+      "Cadastre localidades e quarteirões para estruturar o Reconhecimento Geográfico do município.",
+      botao("+ Cadastrar quarteirão", "novo-territorio", "primary"),
     );
   }
   return `<div class="table-wrap"><table><thead><tr><th>Localidade / categoria</th><th>Zona / distrito</th><th>Quarteirão</th><th>Imóveis (R · C · TB · PE · O)</th><th>Mapa</th><th></th></tr></thead><tbody>${itens
@@ -76,13 +76,13 @@ export function telaReconhecimento({ resumo, itens, filtros, usuario }) {
     barraRetornoModulos(moduloInfo, usuario) +
     titulo(
       "Reconhecimento Geográfico",
-      "Cadastro territorial permanente de localidades, quarteirões georreferenciados e estrutura de imóveis.",
-      `<div class="actions">${botao("+ Novo quarteirão permanente", "novo-territorio", "primary")}</div>`,
+      "Cadastro territorial de localidades, quarteirões georreferenciados e estrutura de imóveis.",
+      `<div class="actions">${botao("+ Novo quarteirão", "novo-territorio", "primary")}</div>`,
     ) +
     `<p class="territorio-intro">${icone("map-pin")} Base compartilhada da equipe para organizar localidades, quarteirões e croquis.</p>` +
     `<div class="metrics">${[
       [
-        "Localidades permanentes",
+        "Localidades",
         resumo.total_localidades ?? 0,
         "Bairros e localidades ativas",
         "map-pin",
@@ -90,7 +90,7 @@ export function telaReconhecimento({ resumo, itens, filtros, usuario }) {
       [
         "Quarteirões cadastrados",
         resumo.total_quarteiroes ?? 0,
-        "Cadastro territorial permanente",
+        "Cadastro territorial",
         "clipboard-list",
       ],
       [
@@ -114,8 +114,8 @@ export function telaReconhecimento({ resumo, itens, filtros, usuario }) {
     `<section class="panel">
       <div class="panel-heading">
         <div>
-          <h2>Base territorial permanente</h2>
-          <p>Quarteirões permanentes compartilhados com a equipe do município.</p>
+          <h2>Base territorial</h2>
+          <p>Quarteirões compartilhados com a equipe do município.</p>
         </div>
         ${botao("+ Adicionar quarteirão", "novo-territorio", "secondary")}
       </div>
