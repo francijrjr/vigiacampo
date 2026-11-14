@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Literal, Optional
 from pydantic import BaseModel, Field, EmailStr
 from app.models.user import UserRole
 from app.schemas.base import DadosEntrada
@@ -31,8 +31,16 @@ class UserResponse(UserBase):
     id: int
     is_active: bool
     supervisor_id: Optional[int] = None
+    modulos: list[str] = Field(default_factory=list)
     created_at: datetime
     updated_at: datetime
+
+
+ModuloUsuario = Literal["reconhecimento", "vetorial"]
+
+
+class UserModulesUpdate(DadosEntrada):
+    modulos: list[ModuloUsuario] = Field(default_factory=list)
 
 
 

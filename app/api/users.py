@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.user import User, UserRole
-from app.schemas.user import UserCreate, UserUpdate, UserResponse
+from app.schemas.user import UserCreate, UserUpdate, UserResponse, UserModulesUpdate
 from app.core.security import get_current_supervisor, get_password_hash, get_current_user
 
 router = APIRouter(prefix="/users", tags=["Usuários"])
@@ -109,6 +109,28 @@ def update_user(
     for k, v in data.items():
         setattr(user, k, v)
     db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+@router.put(
+    "/{user_id}/modulos",
+    response_model=UserResponse,
+    summary="Definir módulos habilitados para um agente",
+)
+def update_user_modules(
+    user_id: int,
+    payload: UserModulesUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_supervisor),
+):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    if user.role != UserRole.AGENTE or user.supervisor_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Você só pode definir módulos para agentes da sua equipe")
+    user.modulos = list(dict.fromkeys(payload.modulos))
     db.commit()
     db.refresh(user)
     return user

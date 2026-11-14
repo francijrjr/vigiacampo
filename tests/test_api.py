@@ -408,6 +408,15 @@ def test_boletim_reaproveita_quarteirao_e_endereco_antigos(cliente):
     assert b['imoveis'][0]['lado']=='3'
 
 
+def test_supervisor_define_modulos_do_agente(cliente):
+    h_chefe = headers(cliente, 'chefe')
+    recebido = cliente.put('/api/v1/users/2/modulos', headers=h_chefe, json={'modulos': ['reconhecimento']})
+    assert recebido.status_code == 200, recebido.text
+    assert recebido.json()['modulos'] == ['reconhecimento']
+    assert cliente.put('/api/v1/users/2/modulos', headers=headers(cliente, 'outro'), json={'modulos': ['vetorial']}).status_code == 403
+    assert cliente.put('/api/v1/users/2/modulos', headers=headers(cliente, 'agente'), json={'modulos': ['vetorial']}).status_code == 403
+
+
 def test_reconhecimento_geografico_cadastro_e_permissoes(cliente):
     h_agente=headers(cliente,'agente');h_chefe=headers(cliente,'chefe');h_externo=headers(cliente,'externo')
     geometria={'type':'Polygon','coordinates':[[[-38.52,-3.73],[-38.51,-3.73],[-38.51,-3.72],[-38.52,-3.73]]]}

@@ -85,8 +85,11 @@ export const CATALOGO_MODULOS = [
 
 export function modulosDoUsuario(usuario) {
   if (!usuario) return [];
-  return CATALOGO_MODULOS.filter((modulo) =>
-    modulo.perfis.includes(usuario.role),
+  const liberados = Array.isArray(usuario.modulos)
+    ? usuario.modulos
+    : CATALOGO_MODULOS.map((modulo) => modulo.id);
+  return CATALOGO_MODULOS.filter(
+    (modulo) => modulo.perfis.includes(usuario.role) && liberados.includes(modulo.id),
   );
 }
 

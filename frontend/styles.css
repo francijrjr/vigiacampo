@@ -1077,3 +1077,27 @@ form footer {
     }
   }
 }
+
+.module-access-options {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f7faf8;
+}
+.module-access-options legend { padding: 0 5px; font-size: 13px; color: var(--muted); }
+.module-access-options label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: #fff;
+  border: 1px solid #e1ece4;
+  color: var(--ink);
+  font-weight: 700;
+}
+.module-access-options input { width: 18px; height: 18px; accent-color: var(--green); }
+.modulos-agente { color: var(--green); font-weight: 700; white-space: nowrap; }

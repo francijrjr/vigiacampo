@@ -1,7 +1,7 @@
 from app.core.datas import agora_utc
 import enum
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum as SAEnum, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum as SAEnum, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from app.db.session import Base
 
@@ -23,6 +23,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     municipio = Column(String(100), nullable=True)
     supervisor_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    modulos = Column(JSON, nullable=True, default=lambda: ["reconhecimento", "vetorial"])
     created_at = Column(DateTime, default=agora_utc)
     updated_at = Column(DateTime, default=agora_utc, onupdate=agora_utc)
 

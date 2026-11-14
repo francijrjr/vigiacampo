@@ -47,9 +47,32 @@ export function criarAcoesEquipe({ render, modal }) {
     await render();
   }
 
+  async function executarModulosAgente(valor) {
+    const usuario = estado.equipeAtual.find((item) => item.id === Number(valor));
+    const habilitados = Array.isArray(usuario.modulos)
+      ? usuario.modulos
+      : ["reconhecimento", "vetorial"];
+    return modal(
+      `Módulos de ${usuario.full_name}`,
+      [],
+      {},
+      (dados) => api(`/users/${usuario.id}/modulos`, { method: "PUT", body: dados }),
+      "Salvar módulos",
+      (form) => {
+        form.querySelector(".form-grid").innerHTML = `<fieldset class="module-access-options"><legend>Selecione o que este agente poderá acessar</legend><label><input type="checkbox" name="reconhecimento" ${habilitados.includes("reconhecimento") ? "checked" : ""}> Reconhecimento Geográfico</label><label><input type="checkbox" name="vetorial" ${habilitados.includes("vetorial") ? "checked" : ""}> Controle Vetorial</label></fieldset>`;
+        return {
+          ler: () => ({
+            modulos: ["reconhecimento", "vetorial"].filter((nome) => form.elements[nome].checked),
+          }),
+        };
+      },
+    );
+  }
+
   return {
     "novo-agente": executarNovoAgente,
     "editar-agente": executarNovoAgente,
     "acesso-agente": executarAcessoAgente,
+    "modulos-agente": executarModulosAgente,
   };
 }

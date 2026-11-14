@@ -3,6 +3,17 @@ import { icone } from "./icones.js";
 
 import { empty, painel, botao, titulo } from "./componentes.js";
 
+const nomesModulos = {
+  reconhecimento: "Território",
+  vetorial: "Vetorial",
+};
+
+function modulosDoAgente(usuario) {
+  return Array.isArray(usuario.modulos)
+    ? usuario.modulos
+    : ["reconhecimento", "vetorial"];
+}
+
 export function equipe({ dados: equipeAtual, pagina }) {
   return (
     titulo(
@@ -13,7 +24,7 @@ export function equipe({ dados: equipeAtual, pagina }) {
     painel(
       "Agentes de campo",
       equipeAtual.length
-        ? `<div class="table-wrap"><table><thead><tr><th>Agente</th><th>Usuário</th><th>Município</th><th>Acesso</th><th></th></tr></thead><tbody>${equipeAtual.map((usuario) => `<tr><td><strong>${e(usuario.full_name)}</strong><small>${e(usuario.email)}</small></td><td>${e(usuario.username)}</td><td>${e(usuario.municipio)}</td><td><span class="badge ${usuario.is_active ? "SYNCED" : ""}">${usuario.is_active ? "Ativo" : "Desativado"}</span></td><td><div class="actions">${botao("Editar", `editar-agente:${usuario.id}`)}${botao(usuario.is_active ? "Desativar" : "Ativar", `acesso-agente:${usuario.id}`, usuario.is_active ? "danger" : "secondary")}</div></td></tr>`).join("")}</tbody></table></div>`
+        ? `<div class="table-wrap"><table><thead><tr><th>Agente</th><th>Usuário</th><th>Município</th><th>Módulos</th><th>Acesso</th><th></th></tr></thead><tbody>${equipeAtual.map((usuario) => `<tr><td><strong>${e(usuario.full_name)}</strong><small>${e(usuario.email)}</small></td><td>${e(usuario.username)}</td><td>${e(usuario.municipio)}</td><td><small class="modulos-agente">${modulosDoAgente(usuario).map((modulo) => e(nomesModulos[modulo] || modulo)).join(" · ") || "Nenhum"}</small></td><td><span class="badge ${usuario.is_active ? "SYNCED" : ""}">${usuario.is_active ? "Ativo" : "Desativado"}</span></td><td><div class="actions">${botao("Módulos", `modulos-agente:${usuario.id}`, "secondary")}${botao("Editar", `editar-agente:${usuario.id}`)}${botao(usuario.is_active ? "Desativar" : "Ativar", `acesso-agente:${usuario.id}`, usuario.is_active ? "danger" : "secondary")}</div></td></tr>`).join("")}</tbody></table></div>`
         : empty(
             "Sua equipe começa aqui",
             "Cadastre um agente para liberar o acesso ao sistema.",
