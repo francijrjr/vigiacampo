@@ -21,10 +21,15 @@ export function criarAcoesNavegacao({ render }) {
     return render();
   }
 
+  function executarIrRegistros() {
+    location.hash = "registros";
+  }
+
   return {
     recarregar: executarRecarregar,
     anterior: executarAnterior,
     proxima: executarProxima,
     "limpar-filtros": executarLimparFiltros,
+    "ir-registros": executarIrRegistros,
   };
 }

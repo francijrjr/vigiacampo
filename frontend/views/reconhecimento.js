@@ -68,7 +68,22 @@ function tabelaTerritorio(itens, supervisor) {
     .join("")}</tbody></table></div>`;
 }
 
-export function telaReconhecimento({ resumo, itens, filtros, usuario }) {
+function registrosDoDia(registros) {
+  if (!registros.length)
+    return empty(
+      "Comece pelo registro diário",
+      "Crie o registro de hoje para iniciar o reconhecimento em campo.",
+      botao("+ Criar registro diário", "novo-registro", "primary"),
+    );
+  return `<div class="reconhecimento-registros-lista">${registros.map((registro) => `<a href="#registro/${registro.id}" class="reconhecimento-registro">
+    <span class="reconhecimento-registro-data">${new Date(`${registro.data}T12:00:00`).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}</span>
+    <span class="reconhecimento-registro-copy"><strong>${e(registro.municipio)}</strong><small>${e(registro.zona || "Sem zona definida")} · ${e(registro.atividade)}</small></span>
+    <span class="badge ${e(registro.status)}">${e(registro.status === "SYNCED" ? "Enviado" : registro.status === "DRAFT" ? "Rascunho" : "Pendente")}</span>
+    ${icone("arrow-right")}
+  </a>`).join("")}</div>`;
+}
+
+export function telaReconhecimento({ resumo, itens, filtros, usuario, registros }) {
   const supervisor = usuario.role === "SUPERVISOR";
   const moduloInfo = CATALOGO_MODULOS.find((m) => m.id === "reconhecimento");
 
@@ -76,10 +91,14 @@ export function telaReconhecimento({ resumo, itens, filtros, usuario }) {
     barraRetornoModulos(moduloInfo, usuario) +
     titulo(
       "Reconhecimento Geográfico",
-      "Cadastro territorial de localidades, quarteirões georreferenciados e estrutura de imóveis.",
-      `<div class="actions">${botao("+ Novo quarteirão", "novo-territorio", "primary")}</div>`,
+      "O registro diário organiza o trabalho antes do mapeamento de quarteirões.",
+      `<div class="actions">${botao("+ Novo registro diário", "novo-registro", "primary")}</div>`,
     ) +
-    `<p class="territorio-intro">${icone("map-pin")} Base compartilhada da equipe para organizar localidades, quarteirões e croquis.</p>` +
+    `<section class="reconhecimento-etapa" aria-label="Primeira etapa: registro diário">
+      <div class="reconhecimento-etapa-cabecalho"><div><span class="reconhecimento-etapa-numero">1</span><div><h2>Registro diário</h2><p>Inicie por aqui e acompanhe os registros recentes da equipe.</p></div></div>${botao("Ver registros", "ir-registros", "secondary")}</div>
+      ${registrosDoDia(registros)}
+    </section>` +
+    `<p class="territorio-intro">${icone("map-pin")} <strong>2. Reconhecimento geográfico</strong><span>Cadastre e mapeie os quarteirões vinculados ao trabalho de campo.</span></p>` +
     `<div class="metrics">${[
       [
         "Localidades",

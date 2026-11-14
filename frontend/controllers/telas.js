@@ -86,9 +86,10 @@ export function criarTelas(render) {
 
   async function reconhecimento(versao) {
     const filtros = estado.filtrosTerritorio;
-    const [resumo, itens] = await Promise.all([
+    const [resumo, itens, registros] = await Promise.all([
       consultarResumoTerritorio(),
       consultarTerritorio(filtros),
+      consultarRegistros({}, 0, 5),
     ]);
     if (versao !== estado.renderAtual) return "";
     estado.territorioAtual = itens;
@@ -97,6 +98,7 @@ export function criarTelas(render) {
       itens,
       filtros,
       usuario: usuarioAtual(),
+      registros,
     });
   }
 

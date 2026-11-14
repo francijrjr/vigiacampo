@@ -108,6 +108,10 @@
   .module-card-header h3 { font-size: 20px; }
   .module-open-btn { min-height: 52px; font-size: 15px; border-radius: 13px; }
   .territorio-intro { margin: -4px 2px 16px; font-size: 12px; line-height: 1.45; }
+  .reconhecimento-etapa-cabecalho { align-items: flex-start; padding: 16px; }
+  .reconhecimento-etapa-cabecalho .secondary { min-height: 38px; padding-inline: 10px; font-size: 12px; }
+  .reconhecimento-registro { grid-template-columns: 42px minmax(0, 1fr) 16px; gap: 8px; padding: 13px 16px; }
+  .reconhecimento-registro .badge { display: none; }
   .topbar-module-btn span { display: none; }
   .topbar-module-btn { padding: 8px 10px; min-height: 36px; }
 }
