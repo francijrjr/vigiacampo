@@ -864,6 +864,31 @@ textarea {
   line-height: 1.4;
   color: var(--muted);
 }
+.territorio-visualizacao { display: grid; gap: 22px; }
+.territorio-visualizacao-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.territorio-visualizacao-label, .territorio-ficha-bloco > span, .territorio-observacoes > span, .territorio-mapa-visualizacao span { display: block; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.territorio-visualizacao h3 { margin: 5px 0 4px; font-size: 22px; letter-spacing: -.7px; }
+.territorio-visualizacao p { margin: 0; color: var(--muted); font-size: 13px; }
+.territorio-resumo { display: grid; grid-template-columns: 1.4fr repeat(5, 1fr); border: 1px solid var(--line); border-radius: 13px; overflow: hidden; background: #fbfdfb; }
+.territorio-resumo > div { min-width: 0; padding: 13px 10px; border-left: 1px solid var(--line); text-align: center; }
+.territorio-resumo > div:first-child { border-left: 0; background: #e7f1e8; }
+.territorio-resumo strong { display: block; font-family: Manrope, sans-serif; font-size: 20px; line-height: 1.1; }
+.territorio-resumo span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.2; }
+.territorio-ficha-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 14px; }
+.territorio-ficha-bloco, .territorio-observacoes, .territorio-mapa-visualizacao { padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: #fafcf9; }
+.territorio-ficha-bloco dl { display: grid; gap: 11px; margin: 13px 0 0; }
+.territorio-ficha-bloco dl div { display: flex; justify-content: space-between; gap: 16px; font-size: 12px; }
+.territorio-ficha-bloco dt { color: var(--muted); }
+.territorio-ficha-bloco dd { margin: 0; font-weight: 700; text-align: right; }
+.territorio-ruas { display: grid; gap: 8px; margin: 13px 0 0; padding: 0; list-style: none; }
+.territorio-ruas li { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; line-height: 1.35; }
+.territorio-ruas li::before { content: ""; width: 6px; height: 6px; margin-top: 5px; border-radius: 50%; flex: 0 0 auto; background: #4f9972; }
+.territorio-observacoes p { margin-top: 10px; line-height: 1.55; }
+.territorio-mapa-visualizacao { padding-bottom: 0; overflow: hidden; }
+.territorio-mapa-visualizacao > div:first-child { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 13px; }
+.territorio-mapa-visualizacao small { color: var(--muted); font-size: 11px; text-align: right; }
+.territorio-mapa-canvas { height: 260px; margin-inline: -16px; border-top: 1px solid var(--line); }
+.territorio-visualizacao footer { display: flex; justify-content: flex-end; }
 .form-error {
   color: var(--red) !important;
   font-size: 12px;

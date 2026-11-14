@@ -1,9 +1,30 @@
 import { api, usuarioAtual } from "../models/api.js";
 import { estado } from "../models/estado.js";
 import { montarMapaQuarteirao } from "../views/mapa-quarteirao.js";
-import { camposTerritorio } from "../views/reconhecimento.js";
+import { camposTerritorio, visualizacaoTerritorio } from "../views/reconhecimento.js";
 
-export function criarAcoesReconhecimento({ render, modal }) {
+export function criarAcoesReconhecimento({ render, modal, dialog }) {
+  function abrirMapaConsulta(container, geometria) {
+    if (!container || !geometria || !window.L) return;
+    const mapa = window.L.map(container, { zoomControl: true, scrollWheelZoom: false, attributionControl: false });
+    window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(mapa);
+    const camada = window.L.geoJSON(geometria, { style: { color: "#176448", weight: 3, fillColor: "#91c9a7", fillOpacity: 0.34 } }).addTo(mapa);
+    mapa.fitBounds(camada.getBounds(), { padding: [24, 24], maxZoom: 18 });
+    const observer = new ResizeObserver(() => mapa.invalidateSize());
+    observer.observe(container);
+    dialog.addEventListener("close", () => { observer.disconnect(); mapa.remove(); }, { once: true });
+  }
+
+  async function executarVerTerritorio(valor) {
+    const item = estado.territorioAtual.find((territorio) => territorio.id === Number(valor));
+    if (!item) throw new Error("Quarteirão não encontrado. Atualize a lista e tente novamente.");
+    document.querySelector("#dialog-title").textContent = "Consultar quarteirão";
+    document.querySelector("#dialog-body").innerHTML = visualizacaoTerritorio(item);
+    dialog.showModal();
+    document.querySelector("[data-fechar-visualizacao]").onclick = () => dialog.close();
+    abrirMapaConsulta(document.querySelector(".territorio-mapa-canvas"), item.geometria);
+  }
+
   async function executarSalvarTerritorio(valor, nome) {
     const editando = nome === "editar-territorio" && valor;
     const atual = editando
@@ -57,6 +78,7 @@ export function criarAcoesReconhecimento({ render, modal }) {
   }
 
   return {
+    "ver-territorio": executarVerTerritorio,
     "novo-territorio": executarSalvarTerritorio,
     "editar-territorio": executarSalvarTerritorio,
     "excluir-territorio": executarExcluirTerritorio,

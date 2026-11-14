@@ -26,6 +26,46 @@ export const camposTerritorio = [
   ["observacoes", "Referências e limites do quarteirão", "textarea"],
 ];
 
+export function visualizacaoTerritorio(item) {
+  const ruas = String(item.logradouros || "")
+    .split(/[;\n]+/)
+    .map((rua) => rua.trim())
+    .filter(Boolean);
+  const temMapa = Boolean(item.geometria);
+  const total = item.total_imoveis ?? 0;
+  return `<article class="territorio-visualizacao">
+    <div class="territorio-visualizacao-topo">
+      <div>
+        <span class="territorio-visualizacao-label">Base territorial</span>
+        <h3>QT ${e(item.quarteirao_numero)} · ${e(item.localidade)}</h3>
+        <p>${e(item.municipio)} · ${e(item.categoria)}${item.zona ? ` · ${e(item.zona)}` : ""}</p>
+      </div>
+      <span class="badge ${temMapa ? "SYNCED" : "DRAFT"}">${icone(temMapa ? "map-pin" : "circle-dashed")} ${temMapa ? "Croqui disponível" : "Sem croqui"}</span>
+    </div>
+    <section class="territorio-resumo" aria-label="Resumo de imóveis">
+      <div><strong>${total}</strong><span>imóveis</span></div>
+      <div><strong>${item.residenciais}</strong><span>residenciais</span></div>
+      <div><strong>${item.comerciais}</strong><span>comerciais</span></div>
+      <div><strong>${item.terrenos_baldios}</strong><span>terrenos baldios</span></div>
+      <div><strong>${item.pontos_estrategicos}</strong><span>pontos estratégicos</span></div>
+      <div><strong>${item.outros}</strong><span>outros</span></div>
+    </section>
+    <div class="territorio-ficha-grid">
+      <section class="territorio-ficha-bloco">
+        <span>Identificação</span>
+        <dl><div><dt>Distrito / CRES</dt><dd>${e(item.distrito || "Não informado")}</dd></div><div><dt>Lados</dt><dd>${e(item.lados)} lados</dd></div>${item.codigo_localidade ? `<div><dt>Código da localidade</dt><dd>${e(item.codigo_localidade)}</dd></div>` : ""}</dl>
+      </section>
+      <section class="territorio-ficha-bloco">
+        <span>Ruas e logradouros</span>
+        ${ruas.length ? `<ul class="territorio-ruas">${ruas.map((rua) => `<li>${e(rua)}</li>`).join("")}</ul>` : '<p class="muted">Nenhuma rua informada.</p>'}
+      </section>
+    </div>
+    ${item.observacoes ? `<section class="territorio-observacoes"><span>Referências e limites</span><p>${e(item.observacoes)}</p></section>` : ""}
+    ${temMapa ? '<section class="territorio-mapa-visualizacao"><div><span>Croqui do quarteirão</span><small>Representação cadastrada para consulta.</small></div><div class="territorio-mapa-canvas" aria-label="Mapa do quarteirão"></div></section>' : ""}
+    <footer><button type="button" class="secondary" data-fechar-visualizacao>Fechar</button></footer>
+  </article>`;
+}
+
 function tabelaTerritorio(itens, supervisor) {
   if (!itens.length) {
     return empty(
@@ -34,31 +74,32 @@ function tabelaTerritorio(itens, supervisor) {
       botao("+ Cadastrar quarteirão", "novo-territorio", "primary"),
     );
   }
-  return `<div class="table-wrap"><table><thead><tr><th>Localidade / categoria</th><th>Zona / distrito</th><th>Quarteirão</th><th>Imóveis (R · C · TB · PE · O)</th><th>Mapa</th><th></th></tr></thead><tbody>${itens
+  return `<div class="table-wrap territorio-table-wrap"><table class="territorio-tabela"><thead><tr><th>Localidade / categoria</th><th>Zona / distrito</th><th>Quarteirão</th><th>Imóveis (R · C · TB · PE · O)</th><th>Mapa</th><th></th></tr></thead><tbody>${itens
     .map((item) => {
       const temMapa = Boolean(item.geometria);
       return `<tr>
-        <td>
+        <td data-label="Localidade / categoria">
           <strong>${e(item.localidade)}</strong>
           <small>${e(item.municipio)} · ${e(item.categoria)}${item.codigo_localidade ? ` · Cód. ${e(item.codigo_localidade)}` : ""}</small>
         </td>
-        <td>
+        <td data-label="Zona / distrito">
           <strong>${e(item.zona || "Zona geral")}</strong>
           <small>${e(item.distrito || "20ª CRES")}</small>
         </td>
-        <td>
+        <td data-label="Quarteirão">
           <strong>QT ${e(item.quarteirao_numero)}</strong>
           <small>${e(item.lados)} lados${item.logradouros ? ` · ${e(item.logradouros)}` : ""}</small>
         </td>
-        <td>
+        <td data-label="Imóveis">
           <strong>${item.total_imoveis} imóveis</strong>
           <small>R:${item.residenciais} · C:${item.comerciais} · TB:${item.terrenos_baldios} · PE:${item.pontos_estrategicos} · O:${item.outros}</small>
         </td>
-        <td>
+        <td data-label="Mapa">
           <span class="badge ${temMapa ? "SYNCED" : "DRAFT"}">${icone(temMapa ? "map-pin" : "circle-dashed")} ${temMapa ? "Mapeado" : "Sem croqui"}</span>
         </td>
-        <td>
+        <td data-label="Ações">
           <div class="actions">
+            ${botao("Ver", `ver-territorio:${item.id}`)}
             ${botao("Editar", `editar-territorio:${item.id}`)}
             ${supervisor ? botao("Excluir", `excluir-territorio:${item.id}`, "danger") : ""}
           </div>
@@ -130,7 +171,7 @@ export function telaReconhecimento({ resumo, itens, filtros, usuario, registros 
           `<article class="metric"><div class="metric-header">${label}<span class="metric-icon">${icone(nomeIcone)}</span></div><strong>${valor}</strong><small>${ajuda}</small></article>`,
       )
       .join("")}</div>` +
-    `<section class="panel">
+    `<section class="panel territorio-panel">
       <div class="panel-heading">
         <div>
           <h2>Base territorial</h2>
