@@ -13,7 +13,7 @@ from app.db.session import engine, Base, SessionLocal
 from app.models.user import User, UserRole
 from app.core.security import get_password_hash
 
-from app.api import auth, users, registros, fotos, relatorios, manutencao, painel, boletins, antivetorial
+from app.api import auth, users, registros, fotos, relatorios, manutencao, painel, boletins, antivetorial, territorio
 import app.services.arquivos
 
 
@@ -94,6 +94,7 @@ app.include_router(manutencao.router, prefix=settings.API_V1_STR)
 app.include_router(painel.router, prefix=settings.API_V1_STR)
 app.include_router(boletins.router, prefix=settings.API_V1_STR)
 app.include_router(antivetorial.router, prefix=settings.API_V1_STR)
+app.include_router(territorio.router, prefix=settings.API_V1_STR)
 
 
 @app.exception_handler(IntegrityError)

@@ -12,6 +12,8 @@ const {
   login,
   estrutura,
   inicio,
+  vetorial,
+  reconhecimento,
   registros,
   detalheRegistro,
   visita,
@@ -32,11 +34,17 @@ async function render() {
     location.hash.slice(1) || "inicio"
   ).split("/");
   estrutura(
-    ["registro", "visita", "boletim", "antivetorial"].includes(rota) ? "registros" : rota,
+    ["registro", "visita", "boletim", "antivetorial", "vetorial"].includes(rota)
+      ? "registros"
+      : rota === "modulos"
+        ? "inicio"
+        : rota,
   );
   try {
     let html;
-    if (rota === "inicio") html = await inicio();
+    if (rota === "inicio" || rota === "modulos") html = await inicio();
+    else if (rota === "vetorial") html = await vetorial();
+    else if (rota === "reconhecimento") html = await reconhecimento(numero);
     else if (rota === "registros") html = await registros();
     else if (rota === "registro") html = await detalheRegistro(id, numero);
     else if (rota === "visita") html = await visita(id, imovelId, numero);
@@ -59,6 +67,15 @@ async function render() {
       fichaAntivetorial.onsubmit = async (evento) => {
         evento.preventDefault();
         try { await acao("salvar-antivetorial"); } catch (erro) { avisar(erro.message); }
+      };
+    const formTerritorio = document.querySelector("#territorio-filters");
+    if (formTerritorio)
+      formTerritorio.onsubmit = (ev) => {
+        ev.preventDefault();
+        estado.filtrosTerritorio = Object.fromEntries(
+          [...new FormData(formTerritorio)].filter(([, v]) => v),
+        );
+        render();
       };
     const form = document.querySelector("#filters");
     if (form)
@@ -103,6 +120,21 @@ async function render() {
 }
 
 document.addEventListener("click", async (evento) => {
+  const cartaoModulo = evento.target.closest("[data-module-card]");
+  if (
+    cartaoModulo &&
+    !evento.defaultPrevented &&
+    evento.button === 0 &&
+    !evento.ctrlKey &&
+    !evento.metaKey &&
+    !evento.shiftKey &&
+    !evento.altKey &&
+    !evento.target.closest("a, button, input, select, textarea, label, [data-action]") &&
+    !window.getSelection()?.toString()
+  ) {
+    cartaoModulo.querySelector(".module-open-btn")?.click();
+    return;
+  }
   const linhaRegistro = evento.target.closest("[data-registro-linha]");
   if (linhaRegistro && !evento.defaultPrevented && evento.button === 0
     && !evento.ctrlKey && !evento.metaKey && !evento.shiftKey && !evento.altKey

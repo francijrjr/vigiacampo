@@ -1,6 +1,14 @@
 import { api } from "./api.js";
 
 export const consultarPainel = () => api("/painel");
+export const consultarResumoTerritorio = () => api("/territorio/resumo");
+export const consultarTerritorio = (filtros = {}) => {
+  const parametros = new URLSearchParams(
+    Object.entries(filtros).filter(([, v]) => v),
+  );
+  const sufixo = parametros.toString() ? `?${parametros}` : "";
+  return api(`/territorio/${sufixo}`);
+};
 export const consultarRegistro = (id) => api(`/registros/${id}`);
 export const consultarBoletins = (registroId) =>
   api(`/registros/${registroId}/boletins`);

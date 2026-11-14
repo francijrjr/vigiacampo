@@ -10,6 +10,7 @@ import { icone } from "./icones.js";
 import { dataBr } from "../utils/datas.js";
 import { badge, empty, painel, botao, titulo } from "./componentes.js";
 import { filaPainel } from "./layout.js";
+import { CATALOGO_MODULOS, barraRetornoModulos } from "./modulos.js";
 import { ordenarImoveisPorNumero } from "../utils/ordenacao.js";
 
 function numeroBase(numero) {
@@ -47,7 +48,9 @@ export function tabelaRegistros(registros) {
 }
 
 export function registros({ dados, filtros, pagina, pendentes }) {
+  const moduloInfo = CATALOGO_MODULOS.find((m) => m.id === "vetorial");
   return (
+    barraRetornoModulos(moduloInfo) +
     titulo(
       "Registros diários",
       "O histórico de cada ação em campo.",

@@ -1,5 +1,5 @@
 // Só arquivos públicos da interface entram no cache. Respostas da API nunca são armazenadas.
-const CACHE = "alberio-interface-v17";
+const CACHE = "alberio-interface-v19";
 const ASSETS = [
   "/",
   "/static/styles.css",
@@ -18,6 +18,7 @@ const ASSETS = [
   "/static/controllers/equipe-acoes.js",
   "/static/controllers/navegacao-acoes.js",
   "/static/controllers/rascunhos-acoes.js",
+  "/static/controllers/reconhecimento-acoes.js",
   "/static/controllers/registros-acoes.js",
   "/static/controllers/sessao-acoes.js",
   "/static/controllers/telas.js",
@@ -42,7 +43,9 @@ const ASSETS = [
   "/static/views/interface.js",
   "/static/views/layout.js",
   "/static/views/legenda-depositos.js",
+  "/static/views/modulos.js",
   "/static/views/rascunhos.js",
+  "/static/views/reconhecimento.js",
   "/static/views/registros.js",
   "/static/views/relatorios.js",
   "/static/views/visita.js",

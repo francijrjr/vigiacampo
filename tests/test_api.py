@@ -406,3 +406,27 @@ def test_boletim_reaproveita_quarteirao_e_endereco_antigos(cliente):
     assert b['quarteirao_id']==q['id']
     assert b['imoveis'][0]['logradouro']=='Rua Antiga'
     assert b['imoveis'][0]['lado']=='3'
+
+
+def test_reconhecimento_geografico_cadastro_e_permissoes(cliente):
+    h_agente=headers(cliente,'agente');h_chefe=headers(cliente,'chefe');h_externo=headers(cliente,'externo')
+    geometria={'type':'Polygon','coordinates':[[[-38.52,-3.73],[-38.51,-3.73],[-38.51,-3.72],[-38.52,-3.73]]]}
+    dados=dict(municipio='Fortaleza',distrito='20ª CRES',codigo_localidade='LOC-01',localidade='Centro',
+        categoria='Urbana',zona='Z-01',quarteirao_numero='001',lados=4,logradouros='Av. Central',
+        residenciais=12,comerciais=4,terrenos_baldios=2,pontos_estrategicos=1,outros=1,geometria=geometria)
+    criado=cliente.post('/api/v1/territorio/',headers=h_agente,json=dados)
+    assert criado.status_code==201,criado.text
+    item=criado.json()
+    assert item['total_imoveis']==20
+    assert item['geometria']['type']=='Polygon'
+    assert cliente.post('/api/v1/territorio/',headers=h_agente,json=dados).status_code==409
+    resumo=cliente.get('/api/v1/territorio/resumo',headers=h_chefe).json()
+    assert resumo==dict(total_localidades=1,total_quarteiroes=1,total_mapeados=1,total_imoveis=20)
+    assert len(cliente.get('/api/v1/territorio/?localidade=Centro',headers=h_chefe).json())==1
+    assert len(cliente.get('/api/v1/territorio/',headers=h_externo).json())==0
+    atualizado=cliente.put(f"/api/v1/territorio/{item['id']}",headers=h_agente,json={**dados,'residenciais':15})
+    assert atualizado.status_code==200 and atualizado.json()['total_imoveis']==23
+    assert cliente.delete(f"/api/v1/territorio/{item['id']}",headers=h_agente).status_code==403
+    assert cliente.delete(f"/api/v1/territorio/{item['id']}",headers=h_chefe).status_code==204
+    assert len(cliente.get('/api/v1/territorio/',headers=h_chefe).json())==0
+

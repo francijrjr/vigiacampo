@@ -6,6 +6,7 @@ import { criarAcoesVisitas } from "./visitas-acoes.js";
 import { criarAcoesEquipe } from "./equipe-acoes.js";
 import { criarAcoesRascunhos } from "./rascunhos-acoes.js";
 import { criarAcoesAntivetorial } from "./antivetorial-acoes.js";
+import { criarAcoesReconhecimento } from "./reconhecimento-acoes.js";
 
 export function criarAcoes(contexto) {
   const acoes = {
@@ -17,6 +18,7 @@ export function criarAcoes(contexto) {
     ...criarAcoesEquipe(contexto),
     ...criarAcoesRascunhos(contexto),
     ...criarAcoesAntivetorial(contexto),
+    ...criarAcoesReconhecimento(contexto),
   };
   return async (nome, valor) => {
     const executar = acoes[nome];

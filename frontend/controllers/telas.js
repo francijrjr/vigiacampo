@@ -3,6 +3,8 @@ import { estado } from "../models/estado.js";
 import { fila } from "../models/rascunhos.js";
 import {
   consultarPainel,
+  consultarResumoTerritorio,
+  consultarTerritorio,
   consultarRegistros,
   consultarRegistro,
   consultarBoletins,
@@ -13,6 +15,8 @@ import {
 import * as layoutView from "../views/layout.js";
 import * as registrosView from "../views/registros.js";
 import { inicio as inicioView } from "../views/inicio.js";
+import { telaModulos } from "../views/modulos.js";
+import { telaReconhecimento } from "../views/reconhecimento.js";
 import { visita as visitaView } from "../views/visita.js";
 import { equipe as equipeView } from "../views/equipe.js";
 import { relatorios as relatoriosView } from "../views/relatorios.js";
@@ -53,6 +57,21 @@ export function criarTelas(render) {
   }
 
   async function inicio() {
+    const [resumoVetorial, resumoTerritorio, recentes] = await Promise.all([
+      consultarPainel(),
+      consultarResumoTerritorio(),
+      consultarRegistros({}, 0, 5),
+    ]);
+    return telaModulos({
+      usuario: usuarioAtual(),
+      resumoVetorial,
+      resumoTerritorio,
+      recentes,
+      pendentes: fila(),
+    });
+  }
+
+  async function vetorial() {
     const [resumo, recentes] = await Promise.all([
       consultarPainel(),
       consultarRegistros({}, 0, 5),
@@ -62,6 +81,22 @@ export function criarTelas(render) {
       recentes,
       usuario: usuarioAtual(),
       pendentes: fila(),
+    });
+  }
+
+  async function reconhecimento(versao) {
+    const filtros = estado.filtrosTerritorio;
+    const [resumo, itens] = await Promise.all([
+      consultarResumoTerritorio(),
+      consultarTerritorio(filtros),
+    ]);
+    if (versao !== estado.renderAtual) return "";
+    estado.territorioAtual = itens;
+    return telaReconhecimento({
+      resumo,
+      itens,
+      filtros,
+      usuario: usuarioAtual(),
     });
   }
 
@@ -144,6 +179,8 @@ export function criarTelas(render) {
     login,
     estrutura,
     inicio,
+    vetorial,
+    reconhecimento,
     registros,
     detalheRegistro,
     visita,

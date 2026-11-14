@@ -45,8 +45,18 @@ export function criarAcoesRegistros({ render, modal }) {
       { municipio: usuarioAtual().municipio, codigo_serie: "20ª Ceres", data: hoje(), atividade: "PVE" },
       async (dados) => {
         dados.client_id = crypto.randomUUID();
-        const registro = await api("/registros/", { method: "POST", body: dados });
-        location.hash = `antivetorial/${registro.id}`;
+        if (!navigator.onLine) {
+          guardarFila([...fila(), dados]);
+          return;
+        }
+        try {
+          const registro = await api("/registros/", { method: "POST", body: dados });
+          location.hash = `antivetorial/${registro.id}`;
+        } catch (erro) {
+          if (erro instanceof ErroConexao) {
+            guardarFila([...fila(), dados]);
+          } else throw erro;
+        }
       },
       "Criar ficha antivetorial",
     );

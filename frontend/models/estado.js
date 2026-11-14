@@ -8,4 +8,6 @@ export const estado = {
   boletimAberto: null,
   abaVisita: "inspecoes",
   equipeAtual: [],
+  territorioAtual: [],
+  filtrosTerritorio: {},
 };

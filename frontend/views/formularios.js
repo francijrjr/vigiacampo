@@ -160,7 +160,8 @@ export function formulario(campos, dados = {}, textoBotao = "Salvar") {
 export function lerFormulario(form, campos) {
   const dados = Object.fromEntries(new FormData(form));
   for (const [nome, , tipo] of campos) {
-    if (["number", "decimal"].includes(tipo)) dados[nome] = Number(dados[nome]);
+    if (nome === "lado") dados[nome] = dados[nome] ? String(dados[nome]) : null;
+    else if (["number", "decimal"].includes(tipo)) dados[nome] = Number(dados[nome]);
     else if (!dados[nome] && ["optional", "textarea", "time"].includes(tipo))
       dados[nome] = null;
   }

@@ -11,7 +11,7 @@ export function montarMapaQuarteirao(form, dados) {
   const desenho = painel.querySelector(".mapa-desenho");
   const localizar = painel.querySelector("[data-localizar]");
   const concluir = painel.querySelector("[data-concluir]");
-  const numero = form.elements.numero;
+  const numero = form.elements.numero || form.elements.quarteirao_numero;
   if (!window.L) {
     status.textContent = "Não foi possível carregar o mapa. Reabra o formulário com conexão à internet.";
     painel.querySelectorAll("button").forEach((b) => { b.disabled = true; });

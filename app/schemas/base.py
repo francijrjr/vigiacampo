@@ -14,7 +14,9 @@ class DadosEntrada(BaseModel):
                 dados["email"] = dados["email"].strip() or None
             limites = {"client_id":64, "municipio":100, "codigo_area":50, "ciclo":50, "zona":50,
                        "numero":20, "complemento":100, "logradouro":255, "lado":20, "especie":100,
-                       "produto":100, "numero_amostra":50, "full_name":255, "email":255, "observacoes":10000}
+                       "produto":100, "numero_amostra":50, "full_name":255, "email":255, "observacoes":10000,
+                       "distrito":100, "codigo_localidade":50, "localidade":150, "categoria":50,
+                       "quarteirao_numero":20, "logradouros":500}
             for campo, limite in limites.items():
                 valor = dados.get(campo)
                 if isinstance(valor, str) and len(valor) > limite:
@@ -24,7 +26,8 @@ class DadosEntrada(BaseModel):
             if dados.get("email") and not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", dados["email"]):
                 raise ValueError("Informe um e-mail válido")
             obrigatorios = {"municipio", "codigo_area", "ciclo", "data", "atividade", "status", "concluido",
-                            "numero", "tipo", "tipo_visita", "pendencia", "full_name", "is_active", "password"}
+                            "numero", "tipo", "tipo_visita", "pendencia", "full_name", "is_active", "password",
+                            "localidade", "quarteirao_numero", "categoria"}
             for campo in obrigatorios.intersection(dados):
                 if dados[campo] is None or isinstance(dados[campo], str) and not dados[campo].strip():
                     raise ValueError(f"O campo {campo} não pode ficar vazio")
