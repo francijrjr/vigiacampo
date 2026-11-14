@@ -17,7 +17,7 @@ export const camposTerritorio = [
   ["zona", "Zona / setor", "optional"],
   ["quarteirao_numero", "Quarteirão nº", "text"],
   ["lados", "Quantidade de lados", "number"],
-  ["logradouros", "Ruas / logradouros da quadra", "optional"],
+  ["logradouros", "Ruas / logradouros da quadra", "logradouros"],
   ["residenciais", "Imóveis residenciais (R)", "number"],
   ["comerciais", "Imóveis comerciais (C)", "number"],
   ["terrenos_baldios", "Terrenos baldios (TB)", "number"],

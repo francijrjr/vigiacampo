@@ -857,6 +857,13 @@ textarea:focus {
 textarea {
   resize: vertical;
 }
+.field-help {
+  display: block;
+  margin: 7px 2px 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+}
 .form-error {
   color: var(--red) !important;
   font-size: 12px;

@@ -148,9 +148,17 @@ export function formulario(campos, dados = {}, textoBotao = "Salvar") {
           .join("")}</select>`;
       else if (tipo === "textarea")
         controle = `<textarea name="${nome}" rows="3" maxlength="10000">${escapar(valor)}</textarea>`;
+      else if (tipo === "logradouros") {
+        const ruas = String(valor)
+          .split(/[;\n]+/)
+          .map((rua) => rua.trim())
+          .filter(Boolean)
+          .join("\n");
+        controle = `<textarea name="${nome}" rows="4" maxlength="10000" placeholder="Digite uma rua por linha">${escapar(ruas)}</textarea><small class="field-help">Uma rua por linha. Assim a lista fica organizada e fácil de consultar.</small>`;
+      }
       else
         controle = `<input name="${nome}" type="${["number", "decimal"].includes(tipo) ? "number" : tipo === "optional" ? "text" : tipo}" value="${escapar(valor)}" ${["text", "password", "date", "number", "decimal"].includes(tipo) ? "required" : ""} ${["number", "decimal"].includes(tipo) ? `min="0" step="${tipo === "decimal" ? "any" : "1"}"` : ""} ${tipo === "password" ? 'minlength="6" maxlength="72" autocomplete="new-password"' : ""}>`;
-      return `<div class="${tipo === "textarea" ? "wide" : ""}"><label for="campo-${nome}">${escapar(label)}</label>${controle.replace(`name="${nome}"`, `id="campo-${nome}" name="${nome}"`)}</div>`;
+      return `<div class="${["textarea", "logradouros"].includes(tipo) ? "wide" : ""}"><label for="campo-${nome}">${escapar(label)}</label>${controle.replace(`name="${nome}"`, `id="campo-${nome}" name="${nome}"`)}</div>`;
     })
     .join(
       "",
@@ -162,6 +170,13 @@ export function lerFormulario(form, campos) {
   for (const [nome, , tipo] of campos) {
     if (nome === "lado") dados[nome] = dados[nome] ? String(dados[nome]) : null;
     else if (["number", "decimal"].includes(tipo)) dados[nome] = Number(dados[nome]);
+    else if (tipo === "logradouros") {
+      const ruas = String(dados[nome] || "")
+        .split(/[;\n]+/)
+        .map((rua) => rua.trim())
+        .filter(Boolean);
+      dados[nome] = ruas.length ? ruas.join("; ") : null;
+    }
     else if (!dados[nome] && ["optional", "textarea", "time"].includes(tipo))
       dados[nome] = null;
   }
