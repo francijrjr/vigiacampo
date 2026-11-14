@@ -107,9 +107,6 @@ export function barraRetornoModulos(moduloAtual, usuario) {
 }
 
 function cartaoModulo(modulo, usuario, dadosResumo) {
-  const papelNome =
-    usuario.role === "SUPERVISOR" ? "Supervisor" : "Agente de campo";
-  const permissoes = modulo.permissoes[usuario.role] || [];
   const indicadores = modulo.metricas(dadosResumo);
   return `<article class="module-card module-${e(modulo.tema)}" data-module-card="${e(modulo.id)}">
     <div class="module-card-top">
@@ -129,20 +126,9 @@ function cartaoModulo(modulo, usuario, dadosResumo) {
         )
         .join("")}
     </div>
-    <div class="module-permissions">
-      <div class="module-permissions-title">
-        <span>Permissões do seu perfil</span>
-        <strong>${e(papelNome)}</strong>
-      </div>
-      <ul>
-        ${permissoes
-          .map((item) => `<li>${icone("circle-check")}<span>${e(item)}</span></li>`)
-          .join("")}
-      </ul>
-    </div>
     <div class="module-card-footer">
       <a class="primary module-open-btn" href="#${e(modulo.rota)}">
-        <span>${e(modulo.textoBotao)}</span>
+        <span>Abrir módulo</span>
         ${icone("arrow-right")}
       </a>
     </div>
@@ -168,15 +154,15 @@ export function telaModulos({
   return (
     titulo(
       `Olá, ${nome}.`,
-      "Selecione o módulo de trabalho disponível para o seu perfil de acesso.",
+      "Escolha por onde deseja começar.",
       botao("+ Novo registro", "novo-registro", "primary"),
     ) +
     filaPainel(pendentes) +
     `<section class="modules-Access-banner" aria-label="Identificação de acesso">
       <div class="modules-access-info">
-        <span class="eyebrow">${icone("users")} Ambiente modular · VigiaCampo</span>
-        <h2>Módulos habilitados para a sua conta</h2>
-        <p>Você está conectado como <strong>${e(papel)}</strong> (${e(usuario.municipio || "PNCD")}). Novos módulos adicionados ao sistema aparecerão automaticamente nesta grade conforme suas permissões.</p>
+        <span class="eyebrow">${icone("users")} ${e(papel)} · ${e(usuario.municipio || "PNCD")}</span>
+        <h2>Seu espaço de trabalho</h2>
+        <p>Os módulos abaixo estão liberados para sua conta.</p>
       </div>
       <div class="modules-access-summary">
         <span class="modules-count-badge"><strong>${modulos.length}</strong><span>${modulos.length === 1 ? "módulo liberado" : "módulos liberados"}</span></span>
@@ -191,10 +177,12 @@ export function telaModulos({
           .join("")}
       </div>
     </section>` +
-    painel(
-      "Registros recentes do Controle Vetorial",
-      tabelaRegistros(recentes),
-      `<a class="text-button" href="#vetorial">Ir ao Controle Vetorial ${icone("arrow-right")}</a>`,
-    )
+    (recentes.length
+      ? painel(
+          "Registros recentes do Controle Vetorial",
+          tabelaRegistros(recentes),
+          `<a class="text-button" href="#vetorial">Ver todos ${icone("arrow-right")}</a>`,
+        )
+      : "")
   );
 }

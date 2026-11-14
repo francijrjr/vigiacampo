@@ -715,6 +715,69 @@
   flex-shrink: 0;
 }
 
+/* Página de módulos: uma visão mais direta para quem está em campo. */
+.modules-Access-banner {
+  padding: 20px 24px;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  background: #f3f8f4;
+  border: 1px solid #d8e7dc;
+  color: var(--ink);
+  box-shadow: none;
+}
+.modules-access-info .eyebrow {
+  color: var(--green);
+  background: #e2f0e6;
+  border-color: #d1e5d7;
+}
+.modules-access-info h2 { color: var(--ink); font-size: 21px; margin: 10px 0 3px; }
+.modules-access-info p { color: var(--muted); line-height: 1.45; }
+.modules-count-badge {
+  min-width: 92px;
+  padding: 12px 16px;
+  border-radius: 13px;
+  background: #ffffff;
+  border-color: #d7e7dc;
+}
+.modules-count-badge strong { color: var(--green); font-size: 30px; }
+.modules-count-badge span { color: var(--muted); font-size: 10px; }
+.modules-section { margin-bottom: 22px; }
+.modules-grid { gap: 16px; }
+.module-card {
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: none;
+}
+.module-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.module-card-top { margin-bottom: 12px; }
+.module-icon-box { width: 42px; height: 42px; border-radius: 13px; }
+.module-icon-box .lucide { width: 21px; height: 21px; }
+.module-card-header h3 { font-size: 20px; }
+.module-subtitle { margin-bottom: 8px; }
+.module-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.module-stats { gap: 0; margin: 0 0 16px; border: 1px solid #e1ece4; border-radius: 12px; overflow: hidden; }
+.module-stat { padding: 10px 7px; border: 0; border-radius: 0; background: #fafcfb; }
+.module-stat + .module-stat { border-left: 1px solid #e1ece4; }
+.module-stat strong { font-size: 19px; }
+.module-stat span { font-size: 10px; line-height: 1.2; }
+.module-open-btn { min-height: 44px; border-radius: 11px; font-size: 13px; }
+.territorio-intro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px 0 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.territorio-intro .lucide { width: 16px; height: 16px; color: var(--green); flex-shrink: 0; }
+
 @media (max-width: 1100px) {
   .work-card {
     grid-template-columns: minmax(0, 1fr) 235px;

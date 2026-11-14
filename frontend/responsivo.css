@@ -97,16 +97,17 @@
   .antivetorial-resumo-acoes > * { min-width: 0; padding-inline: 10px; }
   .choice-header { align-items: flex-start; flex-direction: column; gap: 6px; }
   .choice-grid { gap: 14px; }
-  .modules-Access-banner { flex-direction: column; align-items: stretch; padding: 22px 20px; gap: 16px; border-radius: 18px; }
-  .modules-count-badge { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 14px 16px; min-width: 0; }
-  .modules-count-badge strong { font-size: 28px; }
-  .modules-count-badge span { margin-top: 0; font-size: 12px; }
-  .modules-grid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
-  .module-card { padding: 24px 20px; border-radius: 20px; }
-  .module-card-header h3 { font-size: 22px; }
+  .modules-Access-banner { flex-direction: row; align-items: center; padding: 18px; gap: 14px; border-radius: 15px; }
+  .modules-access-info h2 { font-size: 19px; }
+  .modules-access-info p { font-size: 12px; }
+  .modules-count-badge { min-width: 72px; padding: 10px; }
+  .modules-count-badge strong { font-size: 25px; }
+  .modules-count-badge span { margin-top: 3px; font-size: 9px; }
+  .modules-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .module-card { padding: 18px; border-radius: 15px; }
+  .module-card-header h3 { font-size: 19px; }
   .module-open-btn { min-height: 52px; font-size: 15px; border-radius: 13px; }
-  .territorio-permissoes-card { flex-direction: column; align-items: stretch; padding: 20px 18px; }
-  .territorio-permissoes-acoes > * { width: 100%; justify-content: center; }
+  .territorio-intro { margin: -4px 2px 16px; font-size: 12px; line-height: 1.45; }
   .topbar-module-btn span { display: none; }
   .topbar-module-btn { padding: 8px 10px; min-height: 36px; }
 }
@@ -120,9 +121,9 @@
   .work-copy { padding: 18px 16px; }
   .choice-card { padding: 16px 14px; }
   .choice-top { flex-wrap: wrap; }
-  .module-card { padding: 20px 16px; }
+  .module-card { padding: 16px; }
   .module-card-top { flex-wrap: wrap; }
-  .module-stats { grid-template-columns: minmax(0, 1fr); }
+  .module-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .antivetorial-resumo { padding: 16px; }
   .antivetorial-resumo-metricas { display: grid; grid-template-columns: 1fr; }
   .antivetorial-resumo-acoes { grid-template-columns: 1fr; }

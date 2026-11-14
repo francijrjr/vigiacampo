@@ -79,20 +79,7 @@ export function telaReconhecimento({ resumo, itens, filtros, usuario }) {
       "Cadastro territorial permanente de localidades, quarteirões georreferenciados e estrutura de imóveis.",
       `<div class="actions">${botao("+ Novo quarteirão permanente", "novo-territorio", "primary")}</div>`,
     ) +
-    `<section class="territorio-permissoes-card" aria-label="Controle de acesso do módulo">
-      <div>
-        <span class="eyebrow">${icone("map-pin")} Controle de acesso · ${supervisor ? "Perfil Supervisor" : "Perfil Agente de Campo"}</span>
-        <h2>${supervisor ? "Gestão completa da base territorial permanente" : "Consulta e atualização territorial em campo"}</h2>
-        <p>${
-          supervisor
-            ? "Como supervisor, você pode cadastrar, editar, revisar contornos geográficos no mapa e excluir registros territoriais permanentes de toda a equipe."
-            : "Como agente de campo, você pode consultar a base territorial do município, cadastrar novos quarteirões permanentes e atualizar a estrutura de imóveis e contornos no mapa. A exclusão permanente é exclusiva do supervisor."
-        }</p>
-      </div>
-      <div class="territorio-permissoes-acoes">
-        ${botao("+ Cadastrar quarteirão", "novo-territorio", "primary")}
-      </div>
-    </section>` +
+    `<p class="territorio-intro">${icone("map-pin")} Base compartilhada da equipe para organizar localidades, quarteirões e croquis.</p>` +
     `<div class="metrics">${[
       [
         "Localidades permanentes",
