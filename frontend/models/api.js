@@ -11,6 +11,20 @@ export class ErroConexao extends Error {
 
 export const usuarioAtual = () => sessao?.user;
 
+function mensagemValidacao(erro) {
+  const campo = erro.loc?.slice(1).join(" › ") || "informação";
+  if (erro.type === "extra_forbidden")
+    return `O campo “${campo}” não faz parte deste envio. Atualize a página e tente salvar novamente.`;
+  if (erro.type === "missing") return `Preencha o campo “${campo}” para continuar.`;
+  if (erro.type === "string_too_short")
+    return `O campo “${campo}” está muito curto. Confira a informação digitada.`;
+  if (erro.type === "string_too_long")
+    return `O campo “${campo}” ultrapassou o tamanho permitido. Reduza o texto e tente novamente.`;
+  if (erro.type === "enum")
+    return `Escolha uma opção válida para “${campo}”.`;
+  return `Confira o campo “${campo}”: ${erro.msg || "o valor informado não é válido."}`;
+}
+
 export function guardarSessao(dados) {
   sessao = dados;
   if (dados) sessionStorage.setItem("alberio.sessao", JSON.stringify(dados));
@@ -69,9 +83,7 @@ export async function api(
   if (!resposta.ok) {
     const dados = await resposta.json().catch(() => ({}));
     const mensagem = Array.isArray(dados.detail)
-      ? dados.detail
-          .map((e) => `${e.loc.slice(1).join(" › ")}: ${e.msg}`)
-          .join("\n")
+      ? dados.detail.map(mensagemValidacao).join("\n")
       : dados.detail;
     throw new Error(
       mensagem || `Não foi possível concluir a operação (${resposta.status}).`,

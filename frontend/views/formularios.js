@@ -166,7 +166,10 @@ export function formulario(campos, dados = {}, textoBotao = "Salvar") {
 }
 
 export function lerFormulario(form, campos) {
-  const dados = Object.fromEntries(new FormData(form));
+  const valores = new FormData(form);
+  const dados = Object.fromEntries(
+    campos.map(([nome]) => [nome, valores.get(nome) ?? ""]),
+  );
   for (const [nome, , tipo] of campos) {
     if (nome === "lado") dados[nome] = dados[nome] ? String(dados[nome]) : null;
     else if (["number", "decimal"].includes(tipo)) dados[nome] = Number(dados[nome]);
