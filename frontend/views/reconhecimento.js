@@ -99,7 +99,7 @@ function tabelaTerritorio(itens, supervisor) {
         </td>
         <td data-label="Ações">
           <div class="actions">
-            ${botao("Ver", `ver-territorio:${item.id}`)}
+            ${botao("Boletim", `abrir-boletim-territorio:${item.id}`)}
             ${botao("Editar", `editar-territorio:${item.id}`)}
             ${supervisor ? botao("Excluir", `excluir-territorio:${item.id}`, "danger") : ""}
           </div>

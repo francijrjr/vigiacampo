@@ -2,8 +2,12 @@ import { api, usuarioAtual } from "../models/api.js";
 import { estado } from "../models/estado.js";
 import { montarMapaQuarteirao } from "../views/mapa-quarteirao.js";
 import { camposTerritorio, visualizacaoTerritorio } from "../views/reconhecimento.js";
+import { camposBoletim } from "../views/boletim.js";
+import { escapar } from "../views/formularios.js";
 
 export function criarAcoesReconhecimento({ render, modal, dialog }) {
+  const normalizar = (valor) => String(valor || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+
   function abrirMapaConsulta(container, geometria) {
     if (!container || !geometria || !window.L) return;
     const mapa = window.L.map(container, { zoomControl: true, scrollWheelZoom: false, attributionControl: false });
@@ -23,6 +27,67 @@ export function criarAcoesReconhecimento({ render, modal, dialog }) {
     dialog.showModal();
     document.querySelector("[data-fechar-visualizacao]").onclick = () => dialog.close();
     abrirMapaConsulta(document.querySelector(".territorio-mapa-canvas"), item.geometria);
+  }
+
+  async function executarAbrirBoletimTerritorio(valor) {
+    const territorio = estado.territorioAtual.find((item) => item.id === Number(valor));
+    if (!territorio) throw new Error("Quarteirão não encontrado. Atualize a lista e tente novamente.");
+    const registros = await api("/registros/?skip=0&limit=100");
+    const candidatos = registros.filter((registro) => {
+      const zona = normalizar(registro.zona);
+      return zona && [normalizar(territorio.localidade), normalizar(territorio.zona)].includes(zona);
+    });
+    document.querySelector("#dialog-title").textContent = `Boletim · QT ${territorio.quarteirao_numero}`;
+    document.querySelector("#dialog-body").innerHTML = `<section class="boletim-territorio-escolha">
+      <p>Escolha o registro diário que receberá o <strong>Boletim de Reconhecimento</strong> deste quarteirão.</p>
+      ${candidatos.length ? `<div class="boletim-territorio-registros">${candidatos.map((registro) => `<button type="button" data-action="selecionar-registro-boletim:${territorio.id},${registro.id}"><span>${new Date(`${registro.data}T12:00:00`).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })}</span><strong>${escapar(registro.municipio)}</strong><small>${escapar(registro.zona || "Sem localidade")} · ${escapar(registro.atividade)}</small></button>`).join("")}</div>` : `<div class="boletim-territorio-vazio"><strong>Nenhum registro diário encontrado para ${escapar(territorio.localidade)}.</strong><span>Crie o registro diário primeiro e depois abra o boletim deste quarteirão.</span></div>`}
+      <footer><button type="button" class="secondary" data-fechar-visualizacao>Fechar</button></footer>
+    </section>`;
+    dialog.showModal();
+    document.querySelector("[data-fechar-visualizacao]").onclick = () => dialog.close();
+  }
+
+  async function executarSelecionarRegistroBoletim(valor) {
+    const [territorioId, registroId] = valor.split(",").map(Number);
+    const territorio = estado.territorioAtual.find((item) => item.id === territorioId);
+    if (!territorio) throw new Error("Quarteirão não encontrado. Atualize a lista e tente novamente.");
+    const registro = await api(`/registros/${registroId}`);
+    let quarteirao = registro.quarteiroes.find((item) => String(item.numero) === String(territorio.quarteirao_numero));
+    if (!quarteirao) {
+      quarteirao = await api(`/registros/${registro.id}/quarteiroes`, {
+        method: "POST",
+        body: { numero: territorio.quarteirao_numero, sequencia: 1, lado: "1", logradouro: territorio.logradouros || null, geometria: territorio.geometria || null },
+      });
+    }
+    const boletins = await api(`/registros/${registro.id}/boletins`);
+    const existente = boletins.find((item) => item.quarteirao_id === quarteirao.id);
+    if (existente) {
+      dialog.close();
+      location.hash = `boletim/${registro.id}/${existente.id}`;
+      return;
+    }
+    dialog.close();
+    modal(
+      `Criar Boletim · QT ${territorio.quarteirao_numero}`,
+      camposBoletim,
+      {
+        uf: "CE",
+        distrito: territorio.distrito || "20ª CRES",
+        municipio: territorio.municipio,
+        localidade: territorio.localidade,
+        sublocal: territorio.zona || "",
+        categoria: territorio.categoria,
+        quarteirao_numero: territorio.quarteirao_numero,
+        responsavel: usuarioAtual().full_name,
+        funcao_responsavel: "AGENTE",
+        data: registro.data,
+      },
+      async (dados) => {
+        const novo = await api(`/registros/${registro.id}/boletins`, { method: "POST", body: { ...dados, quarteirao_id: quarteirao.id } });
+        location.hash = `boletim/${registro.id}/${novo.id}`;
+      },
+      "Criar boletim",
+    );
   }
 
   async function executarSalvarTerritorio(valor, nome) {
@@ -79,6 +144,8 @@ export function criarAcoesReconhecimento({ render, modal, dialog }) {
 
   return {
     "ver-territorio": executarVerTerritorio,
+    "abrir-boletim-territorio": executarAbrirBoletimTerritorio,
+    "selecionar-registro-boletim": executarSelecionarRegistroBoletim,
     "novo-territorio": executarSalvarTerritorio,
     "editar-territorio": executarSalvarTerritorio,
     "excluir-territorio": executarExcluirTerritorio,

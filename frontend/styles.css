@@ -893,6 +893,17 @@ textarea {
 .territorio-tabela td:last-child { width: 220px; }
 .territorio-tabela td:last-child .actions { flex-wrap: nowrap; justify-content: flex-end; }
 .territorio-tabela td:last-child .actions button { white-space: nowrap; }
+.boletim-territorio-escolha { display: grid; gap: 18px; }
+.boletim-territorio-escolha > p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.boletim-territorio-registros { display: grid; gap: 9px; }
+.boletim-territorio-registros button { display: grid; grid-template-columns: 95px 1fr; gap: 2px 12px; width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: #fbfdfb; color: var(--ink); text-align: left; transition: border-color .15s ease, background .15s ease, transform .15s ease; }
+.boletim-territorio-registros button:hover { border-color: #74aa87; background: #f1f8f2; transform: translateY(-1px); }
+.boletim-territorio-registros button span { grid-row: span 2; align-self: center; color: var(--green); font-size: 12px; font-weight: 800; }
+.boletim-territorio-registros button strong { font-size: 13px; }
+.boletim-territorio-registros button small { color: var(--muted); font-size: 11px; }
+.boletim-territorio-vazio { display: grid; gap: 5px; padding: 18px; border: 1px dashed #b8cbbd; border-radius: 12px; background: #f8fbf8; font-size: 13px; }
+.boletim-territorio-vazio span { color: var(--muted); line-height: 1.5; }
+.boletim-territorio-escolha footer { display: flex; justify-content: flex-end; gap: 10px; }
 .form-error {
   color: var(--red) !important;
   font-size: 12px;

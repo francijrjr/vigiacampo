@@ -97,6 +97,8 @@
   .territorio-tabela td:nth-child(6) .actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
   .territorio-tabela td:nth-child(6) .actions button { width: 100%; min-width: 0; padding-inline: 5px; font-size: 11px; }
   .territorio-tabela td:nth-child(6) .actions .lucide { width: 16px; height: 16px; }
+  .boletim-territorio-registros button { grid-template-columns: 82px minmax(0, 1fr); }
+  .boletim-territorio-escolha footer { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pager { justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 12px; }
   .data-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
   .queue-note { flex-wrap: wrap; gap: 12px; }
