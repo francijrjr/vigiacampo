@@ -94,8 +94,9 @@
   .territorio-tabela td:nth-child(3), .territorio-tabela td:nth-child(4) { grid-column: 1 / -1; border-right: 0; }
   .territorio-tabela td:nth-child(5) { grid-column: 1 / -1; border-right: 0; }
   .territorio-tabela td:nth-child(6) { grid-column: 1 / -1; border-right: 0; background: #fbfdfb; }
-  .territorio-tabela td:nth-child(6) .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .territorio-tabela td:nth-child(6) .actions button { width: 100%; padding-inline: 8px; }
+  .territorio-tabela td:nth-child(6) .actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+  .territorio-tabela td:nth-child(6) .actions button { width: 100%; min-width: 0; padding-inline: 5px; font-size: 11px; }
+  .territorio-tabela td:nth-child(6) .actions .lucide { width: 16px; height: 16px; }
   .pager { justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 12px; }
   .data-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
   .queue-note { flex-wrap: wrap; gap: 12px; }

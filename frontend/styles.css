@@ -889,6 +889,10 @@ textarea {
 .territorio-mapa-visualizacao small { color: var(--muted); font-size: 11px; text-align: right; }
 .territorio-mapa-canvas { height: 260px; margin-inline: -16px; border-top: 1px solid var(--line); }
 .territorio-visualizacao footer { display: flex; justify-content: flex-end; }
+.territorio-tabela th:last-child { min-width: 220px; }
+.territorio-tabela td:last-child { width: 220px; }
+.territorio-tabela td:last-child .actions { flex-wrap: nowrap; justify-content: flex-end; }
+.territorio-tabela td:last-child .actions button { white-space: nowrap; }
 .form-error {
   color: var(--red) !important;
   font-size: 12px;
